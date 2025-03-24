@@ -1,0 +1,54 @@
+
+\subsubsection*{Comparación de rendimiento: compilación del kernel de Linux}
+
+En esta sección se analiza el rendimiento de tres procesadores modernos al compilar el kernel de Linux, una tarea intensiva y altamente paralelizable que representa una carga exigente para la CPU y el subsistema de memoria. Aunque el equipo bajo análisis utiliza Windows, la compilación del kernel de Linux es una prueba objetiva de rendimiento bruto útil para comparar CPUs.
+
+\subsubsection*{Procesadores evaluados}
+
+\begin{itemize}
+  \item \textbf{Intel Core i5-13600K} (14 núcleos / 20 hilos, arquitectura híbrida Alder Lake)
+  \item \textbf{AMD Ryzen 9 5900X} (12 núcleos / 24 hilos, arquitectura Zen 3)
+  \item \textbf{AMD Ryzen 9 7950X} (16 núcleos / 32 hilos, arquitectura Zen 4)
+\end{itemize}
+
+\subsubsection*{Rendimiento bruto en compilación}
+
+La prueba consiste en compilar el kernel de Linux con configuración por defecto, según benchmarks públicos disponibles en \textit{Phoronix} y \textit{OpenBenchmarking.org}.
+
+\begin{itemize}
+  \item El \textbf{Ryzen 9 7950X} logra tiempos de compilación extraordinariamente bajos, en torno a \textbf{40 segundos}.
+  \item El \textbf{Ryzen 9 5900X}, con menos núcleos y menor IPC, se estima que tarda entre \textbf{80 a 90 segundos}, lo cual representa un rendimiento 50\% inferior.
+  \item El \textbf{Core i5-13600K} también ofrece buen rendimiento gracias a sus 20 hilos, pero queda relegado frente a los Ryzen de gama entusiasta. Se estima que su tiempo ronda los \textbf{90 segundos o más}.
+\end{itemize}
+
+\subsubsection*{Aceleración del Ryzen 9 7950X}
+
+Comparando los tiempos de compilación, se puede calcular la aceleración relativa del Ryzen 9 7950X frente a los otros dos modelos:
+
+\begin{itemize}
+  \item \textbf{Frente al Core i5-13600K:} El 7950X es al menos \textbf{40\% más rápido en promedio general}, y en cargas puramente multihilo como la compilación puede llegar a ser hasta \textbf{100\% más rápido} (el doble de rápido).
+  
+  \item \textbf{Frente al Ryzen 9 5900X:} La ventaja del 7950X oscila entre \textbf{60\% y 80\% de mayor rendimiento}. Tareas que el 5900X ejecuta en 1.5 minutos, el 7950X las resuelve en menos de 1 minuto.
+\end{itemize}
+
+Esta mejora se debe a su mayor cantidad de núcleos, mayor IPC y mayor frecuencia base. Para desarrolladores que compilan grandes proyectos frecuentemente, esta diferencia puede traducirse en horas de trabajo ahorradas cada semana.
+
+\subsubsection*{Resumen comparativo}
+
+\begin{center}
+\begin{tabular}{|p{4.5cm}|c|c|}
+\hline
+\textbf{Procesador} & \textbf{Tiempo estimado de compilación} & \textbf{Aceleración del 7950X} \\
+\hline
+Intel Core i5-13600K & 90+ s & 2× más rápido \\
+\hline
+AMD Ryzen 9 5900X & 80–90 s & 1.6–2× más rápido \\
+\hline
+AMD Ryzen 9 7950X & \textbf{~40 s} & --- \\
+\hline
+\end{tabular}
+\end{center}
+
+\subsubsection*{Conclusión}
+
+El AMD Ryzen 9 7950X se posiciona como el procesador más potente de este grupo para la tarea de compilación del kernel de Linux. Gracias a sus 16 núcleos de alto rendimiento y la mejora de IPC de la arquitectura Zen 4, supera ampliamente tanto al Ryzen 9 5900X como al Intel Core i5-13600K. Aunque este último ofrece una excelente relación rendimiento-precio, para cargas intensivas y recurrentes como la compilación masiva de software, los procesadores Ryzen de gama entusiasta marcan una diferencia sustancial.
