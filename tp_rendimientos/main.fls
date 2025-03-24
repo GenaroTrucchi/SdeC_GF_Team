@@ -1,7 +1,7 @@
 PWD d:\Facultad\sistemas de computacion\SdeC_GF_Team\tp_rendimientos
 INPUT C:\Users\agutr\AppData\Local\MiKTeX\miktex\data\le\pdftex\pdflatex.fmt
-INPUT d:\Facultad\sistemas de computacion\SdeC_GF_Team\tp_rendimientos\informeTP1.tex
-OUTPUT informeTP1.log
+INPUT d:\Facultad\sistemas de computacion\SdeC_GF_Team\tp_rendimientos\main.tex
+OUTPUT main.log
 INPUT D:\MIKTEX\tex\latex\base\article.cls
 INPUT D:\MIKTEX\tex\latex\base\article.cls
 INPUT D:\MIKTEX\tex\latex\base\size12.clo
@@ -83,10 +83,10 @@ INPUT D:\MIKTEX\tex\latex\kvsetkeys\kvsetkeys.sty
 INPUT D:\MIKTEX\tex\latex\kvsetkeys\kvsetkeys.sty
 INPUT D:\MIKTEX\tex\latex\l3backend\l3backend-pdftex.def
 INPUT D:\MIKTEX\tex\latex\l3backend\l3backend-pdftex.def
-INPUT .\informeTP1.aux
-INPUT .\informeTP1.aux
-INPUT informeTP1.aux
-OUTPUT informeTP1.aux
+INPUT .\main.aux
+INPUT .\main.aux
+INPUT main.aux
+OUTPUT main.aux
 INPUT D:\MIKTEX\tex\context\base\mkii\supp-pdf.mkii
 INPUT D:\MIKTEX\tex\context\base\mkii\supp-pdf.mkii
 INPUT D:\MIKTEX\tex\context\base\mkii\supp-pdf.mkii
@@ -95,13 +95,16 @@ INPUT D:\MIKTEX\tex\latex\epstopdf-pkg\epstopdf-base.sty
 INPUT D:\MIKTEX\tex\latex\00miktex\epstopdf-sys.cfg
 INPUT D:\MIKTEX\tex\latex\00miktex\epstopdf-sys.cfg
 INPUT D:\MIKTEX\tex\latex\00miktex\epstopdf-sys.cfg
+INPUT .\caratula.tex
+INPUT .\caratula.tex
+INPUT caratula.tex
 INPUT D:\MIKTEX\fonts\tfm\public\cm\cmr17.tfm
 INPUT D:\MIKTEX\fonts\tfm\public\cm\cmbx12.tfm
 INPUT .\img\logo2.png
 INPUT .\img\logo2.png
 INPUT .\img\logo2.png
 INPUT .\img\logo2.png
-OUTPUT informeTP1.pdf
+OUTPUT main.pdf
 INPUT .\img\logo2.png
 INPUT .\img\logo2.png
 INPUT .\img\logo2.png
@@ -110,7 +113,7 @@ INPUT D:\MIKTEX\fonts\tfm\public\cm\cmr17.tfm
 INPUT D:\MIKTEX\fonts\tfm\public\cm\cmbx12.tfm
 INPUT D:\MIKTEX\fonts\tfm\public\cm\cmbx12.tfm
 INPUT C:\Users\agutr\AppData\Local\MiKTeX\fonts\map\pdftex\pdftex.map
-INPUT informeTP1.aux
+INPUT main.aux
 INPUT D:\MIKTEX\fonts\type1\public\amsfonts\cm\cmbx12.pfb
 INPUT D:\MIKTEX\fonts\type1\public\amsfonts\cm\cmbx12.pfb
 INPUT D:\MIKTEX\fonts\type1\public\amsfonts\cm\cmr12.pfb
