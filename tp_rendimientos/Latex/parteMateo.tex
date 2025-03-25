@@ -1,6 +1,16 @@
 
 \subsubsection*{1. Uso cotidiano de la PC}
-Describir brevemente para qué se usa la PC. Por ejemplo: desarrollo de software, diseño electrónico, juegos, edición de video, etc. Mencionar programas o entornos utilizados.
+La PC se utiliza principalmente para actividades relacionadas con el \textbf{desarrollo de software, la simulación de sistemas concurrentes y digitales, y la ejecución de máquinas virtuales} para pruebas y entornos aislados. Se emplean herramientas como \textbf{Visual Studio Code, GCC, Make, CMake} y simuladores como \textbf{ModelSim} o \textbf{GTKWave} para tareas académicas y proyectos personales. También se utilizan programas como \textbf{KiCad} para diseño electrónico, \textbf{QEMU} y \textbf{VirtualBox} para virtualización, y \textbf{navegadores con múltiples pestañas activas} para documentación, plataformas online y herramientas web. Ocasionalmente se ejecutan \textbf{videojuegos que requieren alto rendimiento gráfico}, además de tareas de \textbf{edición de archivos LaTeX} y uso de sistemas de control de versiones como \textbf{Git}.
+
+\textbf{Componentes}:
+\begin{itemize}
+    \item GTX 1070 8GB VRAM
+    \item i7-7700K
+    \item 16GB RAM 2400Mhz
+    \item 256GB NVMe WD Black
+    \item ASUS PRIME Z270-P
+    \item Gigabyte P650B 650W 80Plus Bronce
+\end{itemize}
 
 \subsubsection*{2. Tareas y benchmarks representativos}
 
@@ -11,14 +21,104 @@ A continuación se presenta una tabla con algunas tareas frecuentes y el benchma
 \hline
 \textbf{Tarea} & \textbf{Benchmark representativo} \\
 \hline
-Ejemplo: Compilar proyectos grandes en C/C++ & Geekbench o Cinebench (CPU multi-core) \\
+Compilar proyectos grandes en C/C++ & Geekbench o Cinebench (CPU multi-core) \\
 \hline
-Ejemplo: Uso de KiCad para diseño de PCBs & PassMark 2D Graphics (fluidez gráfica 2D) \\
+Uso de KiCad para diseño de PCBs & x11perf (fluidez gráfica 2D en entorno X11) \\
 \hline
-Ejemplo: Navegación con muchas pestañas abiertas y uso de herramientas online & PCMark (rendimiento general en tareas de oficina/web) \\
+Juegos exigentes con uso intensivo de GPU & GLmark2 (GPU Gaming Performance) \\
+\hline
+Ejecutar máquinas virtuales o manejar imágenes de disco grandes& fio (rendimiento de disco en lecturas/escrituras) \\
 \hline
 \end{tabular}
 \end{center}
 
+\subsubsection*{Geekbench}
+Se realizó una prueba con la herramienta Geekbench.  
+Resultados obtenidos en el sistema con \textbf{Intel Core i7-7700K}:
+\begin{itemize}
+    \item \textbf{Single-Core Score}: 1479
+    \item \textbf{Multi-Core Score}: 4218
+\end{itemize}
+\begin{center}
+    \begin{tabular}{|c|c|c|}
+    \hline
+    \textbf{Sistema} & \textbf{Single-Core Score} & \textbf{Multi-Core Score} \\
+    \hline
+    Intel Core i7-7700k & 1479 & 4218 \\
+    \hline
+    \end{tabular}
+    \end{center}
+Comparación con otros sistemas:
+
+\begin{center}
+\begin{tabular}{|c|c|c|}
+\hline
+\textbf{Sistema} & \textbf{Single-Core Score} & \textbf{Multi-Core Score} \\
+\hline
+Intel Core i3-10100 & 5504 & 18132 \\
+\hline
+AMD Ryzen 5 7600 & 8654 & 22826 \\
+\hline
+\end{tabular}
+\end{center}
+
+\noindent Como podemos observar, los resultados obtenidos en los sistemas con \textbf{Intel Core i3-10100} y \textbf{AMD Ryzen 5 7600} son significativamente superiores a los del \textbf{i7 7700K}. En términos de rendimiento de un solo núcleo, la diferencia es clara, con los nuevos procesadores alcanzando más de 3 veces el puntaje de nuestro i7. En cuanto a rendimiento multi-núcleo, la diferencia es aún más notable, superando el puntaje del i7 7700K por más de 4 veces. Esto demuestra que, a pesar de ser un procesador de alta gama en su momento, el i7 7700K ha quedado atrás en comparación con los chips más modernos.
+
+\begin{center}
+\includegraphics[width=0.6\textwidth]{img/Geekbench.png}
+\end{center}
+
+
+
+\subsubsection*{x11perf}
+Se realizaron varias pruebas con la herramienta \textbf{x11perf}.  
+Resultados obtenidos:
+
+\begin{center}
+\includegraphics[width=0.6\textwidth]{img/x11perf.png}
+\end{center}
+La PC muestra un buen rendimiento en operaciones gráficas 2D bajo X11, especialmente en tareas como desplazamiento y renderizado de texto. Con un puntaje alto en pruebas de desplazamiento y dibujo, es adecuada para tareas generales como navegación y edición de texto. Sin embargo, para aplicaciones gráficas más intensivas, el rendimiento podría no ser tan alto como el de sistemas más modernos. En resumen, es suficiente para actividades cotidianas, pero podría quedarse corta en tareas gráficas más exigentes.
+\subsubsection*{GLmark2}
+Se realizaron varias pruebas con la herramienta \textbf{GLmark2}.  
+Resultados obtenidos:
+
+\begin{itemize}
+    \item \textbf{GTX 1070}: 6459
+\end{itemize}
+
+Resultados de placas mas modernas:
+
+\begin{center}
+    \begin{itemize}
+        \item \textbf{AMD Radeon RX 6900 XT}: 21869
+        \item \textbf{RX6950 XT}: 19262
+        \item \textbf{RTX 3060 Ti}: 8436
+    \end{itemize}    
+\end{center}
+
+Al compararla con las tarjetas gráficas más modernas, la \textbf{GTX 1070} se queda atrás frente a la gama media actual. Esto hace que, para juegos con altos requisitos gráficos, ya esté comenzando a quedar desactualizada.
+
+
+\subsubsection*{Benchmark de disco con \textbf{fio}}
+Se realizó un test de escritura secuencial con la herramienta fio en un disco \textbf{NVMe WD Black}.  
+Resultados obtenidos:
+\begin{itemize}
+    \item \textbf{IOPS}: 274,456
+    \item \textbf{Ancho de banda (BW)}: 1069 MiB/s (aproximadamente 1121 MB/s)
+    \item \textbf{Latencia promedio de escritura}: 3.44 \textmu s
+    \item \textbf{Latencia máxima de escritura}: 111 \textmu s
+\end{itemize}
+
+Este rendimiento muestra que el \textbf{NVMe WD Black} ofrece una velocidad de escritura secuencial muy alta, con baja latencia, lo que lo convierte en una excelente opción para tareas que requieren un alto rendimiento en discos.
+
 \subsubsection*{3. Reflexión final}
-Comentario sobre si la PC cumple con los requerimientos diarios, si algún componente se vuelve cuello de botella, y si hay interés en evaluar o mejorar el rendimiento en alguna tarea específica.
+
+A pesar de que la PC cumple con las necesidades básicas y las tareas universitarias, como el desarrollo de software, la simulación de sistemas y la ejecución de máquinas virtuales, presenta algunas limitaciones cuando se enfrenta a actividades que requieren un mayor rendimiento, como juegos exigentes y ciertas simulaciones con alto uso de GPU o CPU.
+
+El \textbf{Intel Core i7-7700K}, aunque sigue siendo un procesador decente para tareas generales, ha quedado obsoleto en comparación con los chips más modernos, como el \textbf{AMD Ryzen 5 7600} o el \textbf{Intel Core i3-10100} en cuanto a rendimiento multi-core. Esto se refleja en los benchmarks de Geekbench, donde el rendimiento multi-core del i7 7700K es superado ampliamente por los modelos más nuevos.
+
+Por otro lado, la \textbf{GTX 1070}, a pesar de ser una tarjeta gráfica de gama alta en su momento, ya se muestra limitada para juegos de alto rendimiento gráfico, con resultados que no se comparan con las tarjetas más recientes, como la \textbf{RTX 3060 Ti} o la \textbf{AMD RX 6900 XT}. Esto sugiere que, para juegos exigentes, la tarjeta gráfica está comenzando a quedar desactualizada.
+
+Sin embargo, en cuanto a tareas relacionadas con el \textbf{desarrollo de software} y la \textbf{simulación}, la PC sigue siendo perfectamente funcional. El \textbf{NVMe WD Black} demuestra un rendimiento excelente en cuanto a velocidad de lectura y escritura secuencial, lo que resulta en una experiencia fluida en tareas de compilación y manejo de grandes volúmenes de datos. Además, la memoria RAM y el rendimiento de la CPU son adecuados para proyectos universitarios y uso cotidiano.
+
+En conclusión, la PC cumple perfectamente con las necesidades para actividades académicas y de desarrollo básico, pero presenta limitaciones cuando se requieren altos niveles de rendimiento gráfico o de procesamiento paralelo. Para tareas más exigentes, sería recomendable considerar una actualización de la \textbf{tarjeta gráfica} y la \textbf{CPU}, aunque para actividades más simples y universitarias, la máquina sigue siendo una herramienta eficiente.
