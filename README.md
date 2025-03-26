@@ -55,7 +55,7 @@ Si deseas contribuir a este repositorio, por favor sigue los siguientes pasos:
 
 ## Contacto
 
-Para cualquier consulta o sugerencia, por favor contacta a [tu-email@ejemplo.com](mailto:genaro.trucchi@mi.unc.edu.ar).
+Para cualquier consulta o sugerencia, por favor contacta a [genaro.trucchi@mi.unc.edu.ar](mailto:genaro.trucchi@mi.unc.edu.ar).
 
 ---
 
