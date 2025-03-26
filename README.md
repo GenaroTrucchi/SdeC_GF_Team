@@ -8,7 +8,7 @@ En este repositorio se encontrarán los códigos, informes y demás recursos nec
 
 ## Estructura del Repositorio
 
-- `TP1/`: Contiene los archivos correspondientes al Trabajo Práctico 1.
+- `tp_rendimiento/`: Contiene los archivos correspondientes al Trabajo Práctico 1.
 - `TP2/`: Contiene los archivos correspondientes al Trabajo Práctico 2.
 - `TP3/`: Contiene los archivos correspondientes al Trabajo Práctico 3.
 - `TP4/`: Contiene los archivos correspondientes al Trabajo Práctico 4.
