@@ -52,3 +52,99 @@ AMD Ryzen 9 7950X & \textbf{~40 s} & --- \\
 \subsubsection*{Conclusión}
 
 El AMD Ryzen 9 7950X se posiciona como el procesador más potente de este grupo para la tarea de compilación del kernel de Linux. Gracias a sus 16 núcleos de alto rendimiento y la mejora de IPC de la arquitectura Zen 4, supera ampliamente tanto al Ryzen 9 5900X como al Intel Core i5-13600K. Aunque este último ofrece una excelente relación rendimiento-precio, para cargas intensivas y recurrentes como la compilación masiva de software, los procesadores Ryzen de gama entusiasta marcan una diferencia sustancial.
+
+
+
+Bien, ahora nos dedicaremos a realizar la prueba de rendimiento sobre la ESP32, para lo cual vamos a utilizar herramientas como VSCode. Dentro del mismo, existen diversas plataformas para depurar ESP32; nosotros usamos PlatformIO, debido a su sencillez. Una vez ya creado el proyecto y configurada la placa, procedemos a agregar el siguiente código:
+
+
+\lstset{style=arduino}
+
+\subsubsection*{Código de Prueba de Frecuencia en ESP32}
+
+A continuación, se presenta el código de Arduino utilizado para medir el tiempo de ejecución de una serie de operaciones matemáticas con diferentes frecuencias de clock en la ESP32:
+
+\begin{lstlisting}[language=C++, caption=Código para medir el tiempo de ejecución en ESP32, label=lst:esp32_code]
+#include <Arduino.h>
+
+void setup() {
+  Serial.begin(115200);
+  delay(1000); // Espera para la inicialización del Serial
+
+  // Cambiar la frecuencia de la CPU a 80MHz (opcional)
+  setCpuFrequencyMhz(80); // O 160 o 240
+  Serial.print("Frecuencia de CPU: ");
+  Serial.print(getCpuFrequencyMhz());
+  Serial.println(" MHz");
+
+  // Medir el tiempo de ejecución del bucle
+  unsigned long startTime = millis();
+
+  // Bucle for con sumas de enteros
+  int sumInt = 0;
+  for (int i = 0; i < 1000000; i++) {
+    sumInt += i;
+  }
+
+  // Bucle for con sumas de floats
+  float sumFloat = 0.0;
+  for (float f = 0.0; f < 1000000.0; f += 1.0) {
+    sumFloat += f;
+  }
+
+  unsigned long endTime = millis();
+  unsigned long duration = endTime - startTime;
+
+  Serial.print("Suma de enteros: ");
+  Serial.println(sumInt);
+  Serial.print("Suma de floats: ");
+  Serial.println(sumFloat);
+  Serial.print("Tiempo de ejecución: ");
+  Serial.print(duration);
+  Serial.println(" ms");
+}
+
+void loop() {
+  // No hay nada en el bucle principal
+}
+\end{lstlisting}
+
+Este código primero inicializa la comunicación serial y luego configura la frecuencia del CPU de la ESP32 a 80 MHz. A continuación, mide el tiempo de ejecución de dos bucles `for`: uno que realiza un millón de sumas de enteros y otro que realiza un millón de sumas de números de punto flotante. Finalmente, imprime la frecuencia del CPU, las sumas resultantes y el tiempo total de ejecución en milisegundos a través del puerto seria.
+
+
+Nuestros resultados con una frecuencia de 80 MHz fueron de 4987 ms (4.987 segundos).
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.7\linewidth]{img/ESP32Test80MG.png}
+    \caption{Prueba a 80 MHz}
+    \label{fig:esp32_80mhz}
+\end{figure}
+
+Ahora se realizará la misma prueba con la frecuencia de 160 MHz,
+
+Dando como resultado un tiempo de ejecución de 2.465 Segundos:
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.7\linewidth]{img/ESP32Test160Mhz.png}
+    \caption{Prueba a 160 MHz}
+    \label{fig:esp32_160mhz}
+\end{figure}
+
+Si hacemos una comparativa entre ambos tiempos, podemos extraer las siguientes conclusiones:
+
+\subsubsection*{Conclusiones}
+
+Al comparar los tiempos de ejecución obtenidos en la ESP32 con diferentes frecuencias de clock, se observa un impacto significativo en el rendimiento:
+
+\textbf{Reducción del tiempo de ejecución:} Al duplicar la frecuencia del clock de 80 MHz a 160 MHz, se espera una reducción considerable en el tiempo necesario para completar las mismas operaciones. \\
+\textbf{Relación no lineal:} Si bien intuitivamente podríamos esperar que al duplicar la frecuencia el tiempo de ejecución se reduzca a la mitad, factores como la latencia de la memoria, la eficiencia de las operaciones a diferentes velocidades y la propia arquitectura del procesador pueden influir en que esta relación no sea perfectamente lineal.\\
+\textbf{Implicaciones en el rendimiento:} Estos resultados demuestran cómo la frecuencia del clock afecta directamente la velocidad de procesamiento de la ESP32. Para aplicaciones que requieren un alto rendimiento y tiempos de respuesta rápidos, operar a una frecuencia más alta puede ser crucial. Sin embargo, es importante considerar el consumo de energía y la generación de calor, que también pueden aumentar con la frecuencia.\\
+
+En resumen, la prueba realizada confirma que aumentar la frecuencia del clock de la ESP32 tiene un efecto positivo en la velocidad de ejecución del código, aunque la mejora real puede depender de diversos factores internos del microcontrolador y la naturaleza específica de las tareas realizadas.
+
+
+
+
+  
