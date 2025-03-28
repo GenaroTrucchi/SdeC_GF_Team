@@ -1,14 +1,15 @@
-\subsubsection*{1. Uso cotidiano de la PC}
-La PC se utiliza principalmente para desarrollo de software y ejecución de simulaciones. Los programas y entornos utilizados incluyen:
+
+\section*{1. Uso cotidiano de la PC}
+La PC se utiliza principalmente para el desarrollo de software y la ejecución de simulaciones. Los programas y entornos utilizados incluyen:
 \begin{itemize}
     \item \textbf{Desarrollo de software:} Visual Studio Code, PyCharm, Eclipse.
     \item \textbf{Simulaciones:} MATLAB, Simulink, ANSYS.
-    \item \textbf{Otros:} Navegación web con múltiples pestañas, edición de documentos en LaTeX.
+    \item \textbf{Otros:} Navegación web con múltiples pestañas, edición de documentos en \LaTeX.
 \end{itemize}
 
-\subsubsection*{2. Tareas y benchmarks representativos}
+\section*{2. Tareas y benchmarks representativos}
 
-A continuación se presenta una tabla con algunas tareas frecuentes relacionadas con simulaciones y desarrollo de código, junto con el benchmark que mejor representa cada una.
+A continuación, se presenta una tabla con algunas tareas frecuentes relacionadas con simulaciones y desarrollo de código, junto con el benchmark que mejor representa cada una.
 
 \begin{center}
 \begin{tabular}{|p{7cm}|p{7cm}|}
@@ -26,7 +27,41 @@ Análisis de datos y cálculos intensivos en Python & Geekbench (CPU single-core
 \end{tabular}
 \end{center}
 
-\subsubsection*{3. Reflexión final}
-En términos generales, la PC cumple con los requerimientos diarios para el desarrollo de software y la ejecución de simulaciones. Sin embargo, se ha identificado que el rendimiento de la CPU puede convertirse en un cuello de botella durante la ejecución de simulaciones complejas y la compilación de proyectos grandes. 
+Ahora veremos algunos resultados, comenzando por el de Geekbench, que hace una revisión general de varios aspectos de mi PC.
 
-Existe interés en evaluar y mejorar el rendimiento en estas tareas específicas, por lo que se considerará realizar actualizaciones de hardware, como la incorporación de un procesador más potente o la ampliación de la memoria RAM, para optimizar el rendimiento.
+Siendo estas las características de mi computadora:
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.7\linewidth]{img/sistema.png}
+    \caption{Prestaciones}
+    \label{fig:enter-label}
+    
+\end{figure}
+dio como resultado general lo siguiente
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.7\linewidth]{img/rendimientoGeek.png}
+    \caption{Resultado}
+    
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.7\linewidth]{img/sistema.png}
+    \caption{Prestaciones}
+    \label{fig:enter-label}
+\end{figure}
+dio como resultado general lo siguiente:
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.7\linewidth]{img/rendimientoGeek.png}
+    \caption{Resultado}
+\end{figure}
+
+Como se puede ver, tengo buenos rendimientos en detección horizontal y muy buenas respuestas en navegación y manejo de PDF e imágenes. Estos resultados podrían verse afectados debido a que, mientras realizaba este benchmark, también realizaba la instalación de un programa en mi computadora.
+
+Luego tuvimos problemas a la hora de correr otros benchmarks, debido a que la mayoría son pagos (SPEC CPU2017) o no corren en la versión actual de Ubuntu (PassMark CPU), por lo que dejaremos este análisis hasta aquí.
+
+\section*{3. Reflexión final}
+En términos generales, la PC cumple con los requerimientos diarios para el desarrollo de software y la ejecución de simulaciones. Sin embargo, se ha identificado que el rendimiento de la CPU puede convertirse en un cuello de botella durante la ejecución de simulaciones complejas y la compilación de proyectos grandes.
