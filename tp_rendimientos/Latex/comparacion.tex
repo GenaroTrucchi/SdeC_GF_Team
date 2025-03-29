@@ -1,4 +1,3 @@
-
 \subsubsection*{Comparación de rendimiento: compilación del kernel de Linux}
 
 En esta sección se analiza el rendimiento de tres procesadores modernos al compilar el kernel de Linux, una tarea intensiva y altamente paralelizable que representa una carga exigente para la CPU y el subsistema de memoria. Aunque el equipo bajo análisis utiliza Windows, la compilación del kernel de Linux es una prueba objetiva de rendimiento bruto útil para comparar CPUs.
@@ -27,7 +26,6 @@ Comparando los tiempos de compilación, se puede calcular la aceleración relati
 
 \begin{itemize}
   \item \textbf{Frente al Core i5-13600K:} El 7950X es al menos \textbf{40\% más rápido en promedio general}, y en cargas puramente multihilo como la compilación puede llegar a ser hasta \textbf{100\% más rápido} (el doble de rápido).
-  
   \item \textbf{Frente al Ryzen 9 5900X:} La ventaja del 7950X oscila entre \textbf{60\% y 80\% de mayor rendimiento}. Tareas que el 5900X ejecuta en 1.5 minutos, el 7950X las resuelve en menos de 1 minuto.
 \end{itemize}
 
@@ -53,18 +51,17 @@ AMD Ryzen 9 7950X & \textbf{~40 s} & --- \\
 
 El AMD Ryzen 9 7950X se posiciona como el procesador más potente de este grupo para la tarea de compilación del kernel de Linux. Gracias a sus 16 núcleos de alto rendimiento y la mejora de IPC de la arquitectura Zen 4, supera ampliamente tanto al Ryzen 9 5900X como al Intel Core i5-13600K. Aunque este último ofrece una excelente relación rendimiento-precio, para cargas intensivas y recurrentes como la compilación masiva de software, los procesadores Ryzen de gama entusiasta marcan una diferencia sustancial.
 
+\bigskip
 
+\subsubsection*{Prueba de rendimiento en la ESP32}
 
-Bien, ahora nos dedicaremos a realizar la prueba de rendimiento sobre la ESP32, para lo cual vamos a utilizar herramientas como VSCode. Dentro del mismo, existen diversas plataformas para depurar ESP32; nosotros usamos PlatformIO, debido a su sencillez. Una vez ya creado el proyecto y configurada la placa, procedemos a agregar el siguiente código:
-
+Para evaluar el impacto de la frecuencia del reloj en el rendimiento de la ESP32, utilizamos la plataforma PlatformIO dentro de VSCode por su simplicidad. Luego de crear el proyecto y configurar la placa, se utilizó el siguiente código:
 
 \lstset{style=arduino}
 
-\subsubsection*{Código de Prueba de Frecuencia en ESP32}
+\subsubsection*{Código de prueba de frecuencia en ESP32}
 
-A continuación, se presenta el código de Arduino utilizado para medir el tiempo de ejecución de una serie de operaciones matemáticas con diferentes frecuencias de clock en la ESP32:
-
-\begin{lstlisting}[language=C++, caption=Código para medir el tiempo de ejecución en ESP32, label=lst:esp32_code]
+\begin{lstlisting}[language=C++, caption={Código para medir el tiempo de ejecución en ESP32}, label=lst:esp32_code]
 #include <Arduino.h>
 
 void setup() {
@@ -109,10 +106,11 @@ void loop() {
 }
 \end{lstlisting}
 
-Este código primero inicializa la comunicación serial y luego configura la frecuencia del CPU de la ESP32 a 80 MHz. A continuación, mide el tiempo de ejecución de dos bucles `for`: uno que realiza un millón de sumas de enteros y otro que realiza un millón de sumas de números de punto flotante. Finalmente, imprime la frecuencia del CPU, las sumas resultantes y el tiempo total de ejecución en milisegundos a través del puerto seria.
+Este código mide el tiempo de ejecución de un millón de sumas enteras y de punto flotante, permitiendo comparar el rendimiento de la ESP32 a distintas frecuencias de reloj.
 
+\subsubsection*{Resultados experimentales}
 
-Nuestros resultados con una frecuencia de 80 MHz fueron de 4987 ms (4.987 segundos).
+Con una frecuencia de 80 MHz, obtuvimos un tiempo total de ejecución de aproximadamente **4987 ms (4.987 segundos)**.
 
 \begin{figure}[H]
     \centering
@@ -121,9 +119,7 @@ Nuestros resultados con una frecuencia de 80 MHz fueron de 4987 ms (4.987 segund
     \label{fig:esp32_80mhz}
 \end{figure}
 
-Ahora se realizará la misma prueba con la frecuencia de 160 MHz,
-
-Dando como resultado un tiempo de ejecución de 2.465 Segundos:
+Al repetir la prueba con una frecuencia de 160 MHz, el tiempo se redujo a **2465 ms (2.465 segundos)**.
 
 \begin{figure}[H]
     \centering
@@ -132,19 +128,15 @@ Dando como resultado un tiempo de ejecución de 2.465 Segundos:
     \label{fig:esp32_160mhz}
 \end{figure}
 
-Si hacemos una comparativa entre ambos tiempos, podemos extraer las siguientes conclusiones:
-
 \subsubsection*{Conclusiones}
 
-Al comparar los tiempos de ejecución obtenidos en la ESP32 con diferentes frecuencias de clock, se observa un impacto significativo en el rendimiento:
+Comparando los tiempos de ejecución en la ESP32 con distintas frecuencias:
 
-\textbf{Reducción del tiempo de ejecución:} Al duplicar la frecuencia del clock de 80 MHz a 160 MHz, se espera una reducción considerable en el tiempo necesario para completar las mismas operaciones. \\
-\textbf{Relación no lineal:} Si bien intuitivamente podríamos esperar que al duplicar la frecuencia el tiempo de ejecución se reduzca a la mitad, factores como la latencia de la memoria, la eficiencia de las operaciones a diferentes velocidades y la propia arquitectura del procesador pueden influir en que esta relación no sea perfectamente lineal.\\
-\textbf{Implicaciones en el rendimiento:} Estos resultados demuestran cómo la frecuencia del clock afecta directamente la velocidad de procesamiento de la ESP32. Para aplicaciones que requieren un alto rendimiento y tiempos de respuesta rápidos, operar a una frecuencia más alta puede ser crucial. Sin embargo, es importante considerar el consumo de energía y la generación de calor, que también pueden aumentar con la frecuencia.\\
+\begin{itemize}
+  \item \textbf{Reducción del tiempo de ejecución:} Al duplicar la frecuencia del reloj de 80 MHz a 160 MHz, el tiempo de ejecución se reduce significativamente.
+  \item \textbf{Relación no perfectamente lineal:} Aunque el rendimiento mejora, la relación no es exactamente 2:1 debido a factores como latencia de memoria y eficiencia interna del procesador.
+  \item \textbf{Relevancia práctica:} Para tareas que requieren procesamiento intensivo, aumentar la frecuencia puede ser beneficioso, aunque debe considerarse el aumento de consumo energético y temperatura.
+\end{itemize}
 
-En resumen, la prueba realizada confirma que aumentar la frecuencia del clock de la ESP32 tiene un efecto positivo en la velocidad de ejecución del código, aunque la mejora real puede depender de diversos factores internos del microcontrolador y la naturaleza específica de las tareas realizadas.
+En resumen, aumentar la frecuencia del clock de la ESP32 tiene un impacto positivo y medible en el rendimiento, lo cual es especialmente relevante en aplicaciones críticas en tiempo.
 
-
-
-
-  
