@@ -61,50 +61,51 @@ Para evaluar el impacto de la frecuencia del reloj en el rendimiento de la ESP32
 
 \subsubsection*{Código de prueba de frecuencia en ESP32}
 
-\begin{lstlisting}[language=C++, caption={Código para medir el tiempo de ejecución en ESP32}, label=lst:esp32_code]
-#include <Arduino.h>
-
-void setup() {
-  Serial.begin(115200);
-  delay(1000); // Espera para la inicialización del Serial
-
-  // Cambiar la frecuencia de la CPU a 80MHz (opcional)
-  setCpuFrequencyMhz(80); // O 160 o 240
-  Serial.print("Frecuencia de CPU: ");
-  Serial.print(getCpuFrequencyMhz());
-  Serial.println(" MHz");
-
-  // Medir el tiempo de ejecución del bucle
-  unsigned long startTime = millis();
-
-  // Bucle for con sumas de enteros
-  int sumInt = 0;
-  for (int i = 0; i < 1000000; i++) {
-    sumInt += i;
+\begin{lstlisting}[language=C++, caption={Codigo para medir el tiempo de ejecucion en ESP32}, label=lst:esp32_code]
+  #include <Arduino.h>
+  
+  void setup() {
+    Serial.begin(115200);
+    delay(1000); // Espera para inicializacion del Serial
+  
+    // Cambiar la frecuencia de la CPU a 80MHz (opcional)
+    setCpuFrequencyMhz(80); // O 160 o 240
+    Serial.print("Frecuencia de CPU: ");
+    Serial.print(getCpuFrequencyMhz());
+    Serial.println(" MHz");
+  
+    // Medir el tiempo de ejecucion del bucle
+    unsigned long startTime = millis();
+  
+    // Bucle for con sumas de enteros
+    int sumInt = 0;
+    for (int i = 0; i < 1000000; i++) {
+      sumInt += i;
+    }
+  
+    // Bucle for con sumas de floats
+    float sumFloat = 0.0;
+    for (float f = 0.0; f < 1000000.0; f += 1.0) {
+      sumFloat += f;
+    }
+  
+    unsigned long endTime = millis();
+    unsigned long duration = endTime - startTime;
+  
+    Serial.print("Suma de enteros: ");
+    Serial.println(sumInt);
+    Serial.print("Suma de floats: ");
+    Serial.println(sumFloat);
+    Serial.print("Tiempo de ejecucion: ");
+    Serial.print(duration);
+    Serial.println(" ms");
   }
-
-  // Bucle for con sumas de floats
-  float sumFloat = 0.0;
-  for (float f = 0.0; f < 1000000.0; f += 1.0) {
-    sumFloat += f;
+  
+  void loop() {
+    // Nada en el bucle principal
   }
-
-  unsigned long endTime = millis();
-  unsigned long duration = endTime - startTime;
-
-  Serial.print("Suma de enteros: ");
-  Serial.println(sumInt);
-  Serial.print("Suma de floats: ");
-  Serial.println(sumFloat);
-  Serial.print("Tiempo de ejecución: ");
-  Serial.print(duration);
-  Serial.println(" ms");
-}
-
-void loop() {
-  // No hay nada en el bucle principal
-}
-\end{lstlisting}
+  \end{lstlisting}
+  
 
 Este código mide el tiempo de ejecución de un millón de sumas enteras y de punto flotante, permitiendo comparar el rendimiento de la ESP32 a distintas frecuencias de reloj.
 

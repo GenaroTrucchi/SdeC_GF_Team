@@ -46,12 +46,18 @@
 % Incluir carátula (asegurate de que caratula.tex exista)
 \input{caratula.tex}
 
-% Contenido del informe
-\section{Resumen}
-Aquí va el resumen del trabajo.
-
 \section{Introducción}
-Aquí va la introducción al informe.
+
+En el presente informe se realiza un análisis comparativo del rendimiento de diferentes sistemas de cómputo utilizados por los integrantes del equipo. El objetivo principal es comprender las capacidades y limitaciones de cada configuración de hardware en relación con sus tareas habituales, que van desde el desarrollo de software y la simulación de sistemas, hasta la ejecución de videojuegos y máquinas virtuales.
+
+Para ello, se llevaron a cabo diversas pruebas utilizando herramientas de benchmarking reconocidas, como \textbf{Geekbench}, \textbf{3DMark}, \textbf{GLmark2}, \textbf{x11perf} y \textbf{fio}, entre otras. Estas herramientas permiten evaluar distintos aspectos clave del rendimiento, como la potencia de procesamiento en tareas de un solo núcleo y múltiples núcleos, la capacidad gráfica de las GPUs, el rendimiento de lectura/escritura de los discos y la latencia de red.
+
+Además del análisis en entornos de escritorio, se incluyó una prueba sobre un microcontrolador \textbf{ESP32}, midiendo su rendimiento al ejecutar operaciones matemáticas bajo distintas frecuencias de reloj. Esto permite observar el impacto del clock en un sistema embebido, útil para proyectos de sistemas concurrentes y tiempo real.
+
+Cada integrante del equipo documentó el uso cotidiano de su PC, identificó los cuellos de botella que afectan su flujo de trabajo, y reflexionó sobre los componentes críticos que influencian el rendimiento en sus actividades particulares. Estas observaciones se complementan con datos empíricos obtenidos a partir de benchmarks, lo que permite establecer comparaciones objetivas entre los distintos sistemas evaluados.
+
+El informe no solo busca medir el rendimiento bruto del hardware, sino también desarrollar una perspectiva crítica sobre su adecuación al uso previsto, considerando factores como eficiencia térmica, estabilidad, consumo de recursos y posibles caminos de mejora.
+
 
 \newpage
 
@@ -79,6 +85,20 @@ Aquí se detallan los resultados del laboratorio.
 \newpage
 
 \section{Conclusiones}
-Conclusiones del trabajo realizado.
+
+A lo largo del informe se analizaron distintos sistemas de cómputo utilizados por los integrantes del equipo, evaluando su rendimiento mediante tareas reales y benchmarks representativos. A partir de estas pruebas, se obtuvieron conclusiones relevantes tanto en el contexto académico como en el uso cotidiano.
+
+En primer lugar, se observó que el rendimiento general de una PC está fuertemente influenciado por la combinación de CPU, GPU, almacenamiento y memoria. Procesadores modernos como el \textbf{Ryzen 9 7950X} demostraron una capacidad de procesamiento muy superior frente a generaciones anteriores como el \textbf{i7-7700K} o el \textbf{i3-9100F}, especialmente en tareas multihilo como la compilación del kernel de Linux. Esto refleja la importancia de contar con una arquitectura moderna y un mayor número de núcleos para flujos de trabajo intensivos.
+
+En cuanto al rendimiento gráfico, herramientas como \textbf{3DMark} y \textbf{GLmark2} permitieron cuantificar la diferencia entre GPUs de distintas generaciones. Modelos como la \textbf{GTX 1050 Ti} o la \textbf{GTX 1070}, aunque aún funcionales para juegos menos exigentes, han quedado por detrás frente a placas modernas como la \textbf{RTX 3060 Ti} o la \textbf{RX 6900 XT}, tanto en calidad visual como en fluidez.
+
+El análisis de almacenamiento con \textbf{fio} demostró que los discos NVMe actuales, como el \textbf{WD Black}, ofrecen velocidades de transferencia y latencias notablemente mejores que generaciones anteriores, lo cual impacta directamente en tareas como compilación, carga de máquinas virtuales y manejo de grandes volúmenes de datos.
+
+Por otro lado, la prueba realizada en la \textbf{ESP32} evidenció el impacto de la frecuencia del reloj en el tiempo de ejecución de código. Si bien aumentar la frecuencia mejora el rendimiento, también implica mayor consumo energético, lo que resulta relevante para sistemas embebidos y aplicaciones de bajo consumo.
+
+Finalmente, el análisis del uso cotidiano de cada equipo permitió identificar los cuellos de botella más frecuentes y proponer mejoras realistas, como la actualización de GPU o CPU, según el perfil de uso. Además, se resaltó la utilidad de herramientas como \textbf{PingPlotter} para diagnosticar problemas de red, fundamentales en contextos de gaming online o trabajo remoto.
+
+En conclusión, el trabajo permitió no solo comparar sistemas de forma objetiva, sino también reflexionar sobre cómo las decisiones de hardware impactan directamente en la experiencia del usuario, el rendimiento académico y profesional, y las posibilidades de expansión futura.
+
 
 \end{document}
