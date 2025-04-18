@@ -1,0 +1,12 @@
+import requests
+import subprocess
+
+# Consumir datos de la API REST
+response = requests.get("https://api.example.com/data")
+data = response.json()
+
+# Convocar el programa en C y pasarle los datos
+result = subprocess.run(["./programa_c", str(data["value"])], capture_output=True, text=True)
+
+# Mostrar el resultado
+print("Resultado:", result.stdout)

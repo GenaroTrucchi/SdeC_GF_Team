@@ -1,0 +1,18 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+// Declaración de la rutina en ensamblador
+extern int calcular_conversion(int valor);
+
+int main(int argc, char *argv[]) {
+    if (argc < 2) {
+        printf("Uso: %s <valor>\n", argv[0]);
+        return 1;
+    }
+
+    int valor = atoi(argv[1]);
+    int resultado = calcular_conversion(valor);
+
+    printf("%d\n", resultado);
+    return 0;
+}
