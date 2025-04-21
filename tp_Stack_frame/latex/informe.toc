@@ -1,0 +1,18 @@
+\babel@toc {spanish}{}\relax 
+\contentsline {section}{\numberline {1}Objetivos generales}{2}{section.1}%
+\contentsline {section}{\numberline {2}Descripción general del funcionamiento}{2}{section.2}%
+\contentsline {section}{\numberline {3}Arquitectura de capas y flujo de datos}{3}{section.3}%
+\contentsline {subsection}{\numberline {3.1}Motivación de las capas}{3}{subsection.3.1}%
+\contentsline {section}{\numberline {4}API REST: concepto y uso práctico}{3}{section.4}%
+\contentsline {subsection}{\numberline {4.1}¿Qué es una API REST?}{3}{subsection.4.1}%
+\contentsline {subsection}{\numberline {4.2}Banco Mundial – endpoint utilizado}{4}{subsection.4.2}%
+\contentsline {section}{\numberline {5}Convención de llamada \emph {cdecl} y la pila}{4}{section.5}%
+\contentsline {subsection}{\numberline {5.1}Layout del stack frame}{4}{subsection.5.1}%
+\contentsline {section}{\numberline {6}Código en C y NASM}{5}{section.6}%
+\contentsline {subsection}{\numberline {6.1}Detalle línea a línea (C)}{5}{subsection.6.1}%
+\contentsline {subsection}{\numberline {6.2}Detalle línea a línea (NASM)}{6}{subsection.6.2}%
+\contentsline {section}{\numberline {7}Depuración con GDB}{6}{section.7}%
+\contentsline {subsection}{\numberline {7.1}Comandos utilizados}{6}{subsection.7.1}%
+\contentsline {section}{\numberline {8}Benchmarks (C vs Python)}{6}{section.8}%
+\contentsline {section}{\numberline {9}Makefile y CI}{7}{section.9}%
+\contentsline {section}{\numberline {10}Conclusiones}{8}{section.10}%

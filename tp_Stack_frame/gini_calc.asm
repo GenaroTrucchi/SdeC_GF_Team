@@ -2,9 +2,9 @@
 ; Ensamblar:  nasm -f elf32 gini_calc.asm -g
 
 section .text
-    global calculate_gini_int          ; firma: int calculate_gini_int(float)
+    global calculate_gini_int   ; firma: 
+                                ; int calculate_gini_int(float)
 
-; int calculate_gini_int(float x)
 calculate_gini_int:
     push    ebp
     mov     ebp, esp

@@ -1,5 +1,5 @@
 \relax 
-\providecommand\babel@aux[2]{}
+\providecommand \babel@aux [2]{\global \let \babel@toc \@gobbletwo }
 \@nameuse{bbl@beforestart}
 \catcode `"\active 
 \catcode `<\active 
@@ -9,28 +9,33 @@
 \providecommand\HyField@AuxAddToFields[1]{}
 \providecommand\HyField@AuxAddToCoFields[2]{}
 \babel@aux{spanish}{}
-\@writefile{toc}{\contentsline {section}{\numberline {1}Introducción}{1}{section.1}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {2}Entorno de trabajo}{1}{section.2}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {3}Inspección del stack}{1}{section.3}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.1}Estado previo a la llamada}{1}{subsection.3.1}\protected@file@percent }
-\@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces Estado del programa antes de la llamada a ASM.}}{1}{figure.caption.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {1}Objetivos generales}{2}{section.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {2}Descripción general del funcionamiento}{2}{section.2}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces Flujo de ejecución completo: desde la API REST hasta la rutina en ensamblador.}}{2}{figure.caption.2}\protected@file@percent }
 \providecommand*\caption@xref[2]{\@setref\relax\@undefined{#1}}
-\newlabel{fig:before}{{1}{1}{Estado del programa antes de la llamada a ASM}{figure.caption.1}{}}
-\newlabel{fig:before@cref}{{[figure][1][]1}{[1][1][]1}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.2}Ejecución en la rutina ASM}{2}{subsection.3.2}\protected@file@percent }
-\@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces Vista paso a paso dentro de \texttt  {calculate\_gini\_int}.}}{2}{figure.caption.2}\protected@file@percent }
-\newlabel{fig:asm}{{2}{2}{Vista paso a paso dentro de \texttt {calculate\_gini\_int}}{figure.caption.2}{}}
-\newlabel{fig:asm@cref}{{[figure][2][]2}{[1][1][]2}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.3}Retorno a \texttt  {C}}{2}{subsection.3.3}\protected@file@percent }
-\@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces Estado del programa después de la llamada.}}{2}{figure.caption.3}\protected@file@percent }
-\newlabel{fig:after}{{3}{2}{Estado del programa después de la llamada}{figure.caption.3}{}}
-\newlabel{fig:after@cref}{{[figure][3][]3}{[1][2][]2}}
-\@writefile{lof}{\contentsline {figure}{\numberline {4}{\ignorespaces Dirección del argumento y verificación de \texttt  {EAX}.}}{3}{figure.caption.4}\protected@file@percent }
-\newlabel{fig:eaxstack}{{4}{3}{Dirección del argumento y verificación de \texttt {EAX}}{figure.caption.4}{}}
-\newlabel{fig:eaxstack@cref}{{[figure][4][]4}{[1][3][]3}}
-\@writefile{toc}{\contentsline {section}{\numberline {4}Diagrama de secuencia completo}{3}{section.4}\protected@file@percent }
-\@writefile{lof}{\contentsline {figure}{\numberline {5}{\ignorespaces Flujo end‑to‑end desde Python hasta la rutina ASM.}}{3}{figure.caption.5}\protected@file@percent }
-\newlabel{fig:sequence}{{5}{3}{Flujo end‑to‑end desde Python hasta la rutina ASM}{figure.caption.5}{}}
-\newlabel{fig:sequence@cref}{{[figure][5][]5}{[1][3][]3}}
-\@writefile{toc}{\contentsline {section}{\numberline {5}Conclusiones}{4}{section.5}\protected@file@percent }
-\gdef \@abspage@last{4}
+\newlabel{fig:sequence}{{1}{2}{Flujo de ejecución completo: desde la API REST hasta la rutina en ensamblador}{figure.caption.2}{}}
+\newlabel{fig:sequence@cref}{{[figure][1][]1}{[1][2][]2}{}{}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {3}Arquitectura de capas y flujo de datos}{3}{section.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.1}Motivación de las capas}{3}{subsection.3.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {4}API REST: concepto y uso práctico}{3}{section.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.1}¿Qué es una API REST?}{3}{subsection.4.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.2}Banco Mundial – endpoint utilizado}{4}{subsection.4.2}\protected@file@percent }
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {1}{\ignorespaces URL solicitada}}{4}{lstlisting.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {5}Convención de llamada \emph  {cdecl} y la pila}{4}{section.5}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.1}Layout del stack frame}{4}{subsection.5.1}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces Fotograma real capturado en GDB: la columna de la derecha (\texttt  {x/16wx \$esp}) muestra los primeros 64~bytes sobre la dirección actual de \texttt  {ESP}.}}{4}{figure.caption.3}\protected@file@percent }
+\newlabel{fig:layout_frame}{{2}{4}{Fotograma real capturado en GDB: la columna de la derecha (\texttt {x/16wx \$esp}) muestra los primeros 64~bytes sobre la dirección actual de \texttt {ESP}}{figure.caption.3}{}}
+\newlabel{fig:layout_frame@cref}{{[figure][2][]2}{[1][4][]4}{}{}{}}
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {2}{\ignorespaces Fragmento clave de calculate_gini_int.asm}}{5}{lstlisting.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {6}Código en C y NASM}{5}{section.6}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.1}Detalle línea a línea (C)}{5}{subsection.6.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.2}Detalle línea a línea (NASM)}{6}{subsection.6.2}\protected@file@percent }
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {3}{\ignorespaces \texttt  {calculate\_gini\_int} paso a paso}}{6}{lstlisting.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {7}Depuración con GDB}{6}{section.7}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {7.1}Comandos utilizados}{6}{subsection.7.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {8}Benchmarks (C vs Python)}{6}{section.8}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {1}{\ignorespaces Costo adicional de cruzar la frontera nativa.}}{7}{table.caption.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {9}Makefile y CI}{7}{section.9}\protected@file@percent }
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {4}{\ignorespaces Extracto relevante de \texttt  {Makefile}}}{7}{lstlisting.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {10}Conclusiones}{8}{section.10}\protected@file@percent }
+\gdef \@abspage@last{9}
