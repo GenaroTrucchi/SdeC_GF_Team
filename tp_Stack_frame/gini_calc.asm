@@ -1,4 +1,4 @@
-; gini_calc.asm – Convierte float → int (floor) y suma 1
+; gini_calc.asm - > Convierte float - > int (floor) y suma 1
 ; Ensamblar:  nasm -f elf32 gini_calc.asm -g
 
 section .text

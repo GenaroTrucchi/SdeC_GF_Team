@@ -57,24 +57,32 @@ def main():
     @brief Función principal. Obtiene el valor GINI y lo envía al ejecutable C.
            Luego imprime el valor procesado por consola.
     """
+    # 1) Llama a get_latest_gini() para recuperar el último índice GINI (float).
     gini_val = get_latest_gini()
 
-    # Ejecuta el binario de 32 bits y le pasa el float por stdin
+    # 2) Ejecuta el binario de 32 bits `gini_processor` y le pasa
+    #    el valor GINI por STDIN (convertido a bytes y terminado en '\n').
     proc = subprocess.run(
-        ["./build/gini_processor"],
-        input=f"{gini_val}\n".encode("utf-8"),
-        stdout=subprocess.PIPE,
-        stderr=subprocess.PIPE,
+        ["./build/gini_processor"],        # Comando a ejecutar
+        input=f"{gini_val}\n".encode("utf-8"),  # STDIN que recibe el programa C
+        stdout=subprocess.PIPE,            # Captura STDOUT del proceso
+        stderr=subprocess.PIPE,            # Captura STDERR del proceso
     )
 
+    # 3) Si el programa C devolvió un código distinto de 0, muestra
+    #    el error y finaliza con el mismo código de salida.
     if proc.returncode != 0:
         print("gini_processor falló:", proc.stderr.decode(), file=sys.stderr)
         sys.exit(proc.returncode)
 
-    # Imprime el valor retornado por el programa en C (floor+1)
+    # 4) Decodifica la salida del programa C, quita espacios en blanco
+    #    y la imprime con la etiqueta solicitada.
     result = proc.stdout.decode().strip()
     print(f"GINI (floor+1) = {result}")
 
 
+# 5) Punto de entrada estándar en Python: si el archivo se ejecuta
+#    directamente (no importado), se llama a main().
 if __name__ == "__main__":
     main()
+

@@ -66,6 +66,8 @@
 \end{itemize}
 % ---------------------------------------------------------------------------
 
+\newpage
+
 \section{Descripción general del funcionamiento}
 \begin{figure}[H]
   \centering
@@ -163,7 +165,7 @@ De arriba (mayor dirección) hacia abajo:
         después con \lstinline{sub esp,4}. Nuestro ejemplo aloja un entero
         temporal donde \lstinline{fistp} escribe el valor truncado.
 \end{enumerate}
-
+\newpage
 \vspace{0.5em}
 \noindent
 \textbf{Limpieza del marco.} La instrucción
@@ -202,6 +204,7 @@ y que todo el marco se limpia respetando la convención \emph{cdecl}.
 
 O sea que, lo que pasa en esa parte es que el número flotante (por ejemplo, 43.8) que se recibió como argumento en la pila es cargado en la FPU, convertido a entero truncado (43) con la instrucción fistp, y luego guardado temporalmente en el stack. Después, se carga ese valor en el registro EAX, se le suma 1 (quedando en 44), y finalmente se devuelve a la función en C. Toda esta transformación se verifica paso a paso con GDB, mostrando que los valores están donde deberían estar según la convención de llamada cdecl.
 % ---------------------------------------------------------------------------
+\newpage
 \section{Código en C y NASM}
 \subsection{Detalle línea a línea (C)}
 \begin{itemize}[leftmargin=*]
