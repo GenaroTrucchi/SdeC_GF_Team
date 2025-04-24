@@ -236,5 +236,37 @@ coreboot es un proyecto de firmware libre y minimalista que reemplaza el BIOS/UE
   \item \emph{Control total} sobre el proceso de arranque y eliminación de código heredado innecesario.
 \end{itemize}
 
+\section{Linker}
+
+\subsection{¿Qué es un linker?}
+Un linker es una herramienta fundamental en el proceso de desarrollo de software. Actúa como un “ensamblador” de piezas de código y datos provenientes de diferentes fuentes para crear un único archivo de salida.
+
+\subsection{¿Qué hace?}
+Sus tareas principales son:
+
+\begin{itemize}[noitemsep]
+  \item \textbf{Combinación de secciones de código y datos:} Los archivos objeto (\texttt{.o}) generados por el ensamblador o el compilador contienen secciones como \texttt{.text} (código), \texttt{.data} (datos inicializados) y \texttt{.bss} (datos no inicializados). El linker toma todas las secciones homónimas de los distintos archivos y las une en una sola sección en el archivo de salida, siguiendo un script de linker o las reglas por defecto.
+  
+  \item \textbf{Resolución de símbolos:} Cuando el código referencia símbolos (por ejemplo, una función \texttt{print\_char} o una variable \texttt{screen\_buffer}), el linker busca su definición entre todos los archivos objeto y bibliotecas de entrada. Luego sustituye cada uso simbólico por la dirección final donde ese símbolo ha sido colocado. Si falta una definición, se produce un error de “referencia no definida”; si hay definiciones duplicadas, un error de “definición múltiple”.
+
+  \item \textbf{Relocalización:} Los archivos objeto contienen direcciones provisionales. El linker ajusta (o “parchea”) estas direcciones para que apunten a las ubicaciones finales en el ejecutable resultante, teniendo en cuenta la dirección base (por ejemplo, \texttt{0x7C00} en un bootloader). Esto incluye tanto saltos internos como referencias a símbolos externos.
+
+  \item \textbf{Generación del archivo de salida:} Finalmente, escribe el ejecutable final en un formato apropiado (ELF, PE, etc.) o, si se solicita (\texttt{--oformat binary}), en un binario crudo. Este archivo contiene todas las secciones combinadas, los símbolos resueltos y las direcciones relocalizadas.
+\end{itemize}
+
+\section{¿Qué es la dirección 0x7C00 y por qué es necesaria?}
+
+La dirección \texttt{0x7C00} es un estándar histórico en la arquitectura x86 que corresponde al punto de memoria donde el BIOS carga el primer sector arrancable (MBR o VBR) de un dispositivo. Su importancia y necesidad en el script del linker se sustenta en varios aspectos:
+
+\begin{itemize}[noitemsep]
+  \item \textbf{Convención del BIOS:} Cuando una PC compatible arranca, el firmware (BIOS) lee 512 bytes desde el comienzo del disco o del medio seleccionado y los copia en la dirección física \texttt{0x7C00}. A partir de ahí, transfiere el control de la CPU a ese bloque de código.  
+
+  \item \textbf{Cálculo de direcciones finales:} El código ensamblado incluye referencias a sus propias etiquetas (datos y saltos). Para que esas referencias apunten correctamente durante la ejecución, el linker debe conocer la dirección base donde residirá el bloque completo. Al indicar \texttt{. = 0x7C00} en el script, le decimos al linker “trata este desplazamiento como el origen real”.  
+
+  \item \textbf{Relocalización adecuada:} Gracias a esa directiva, todas las referencias internas (por ejemplo, direcciones de cadenas o puntos de salto) se ajustan en el momento de enlace de modo que, una vez cargado en \texttt{0x7C00}, el programa funcione sin errores de dirección.
+
+  \item \textbf{Evitar desajustes catastróficos:} Si el linker no supiera esta dirección, asumiría una base por defecto (normalmente 0). El BIOS cargaría el código en \texttt{0x7C00}, pero las direcciones binarias incluidas seguirían apuntando al origen equivocado, haciendo que cualquier acceso a datos o saltos termine en memoria incorrecta y provoque un fallo inmediato.
+\end{itemize}
+
 
 \end{document}
