@@ -14,6 +14,7 @@
 \usepackage{caption}
 \usepackage{listings}
 \usepackage{amsmath}
+\usepackage{amssymb}
 \usepackage{float}
 \usepackage{geometry}
 \usepackage{fancyhdr}
@@ -33,19 +34,24 @@
 \cfoot{\thepage}
 
 % ----------------------- Listings ------------------------------------------
+% Lenguaje NASM
 \lstdefinelanguage{NASM}{
-  morekeywords   ={section,global,extern,fld,fistp,add,leave,ret,push,mov,sub},
-  sensitive      =true,
-  morecomment    =[l]{;},
-  morestring     =[b]",
+  morekeywords={section,global,extern,fld,fistp,add,leave,ret,push,mov,sub},
+  sensitive=true,
+  morecomment=[l]{;},
+  morestring=[b]",
 }
+
+% Lenguaje C (para fragmentos UEFI)
 \lstdefinelanguage{C}{
-  morekeywords   ={EFI_STATUS,CHAR16,UINTN,UINT32,EFI_GUID},
-  sensitive      =true,
-  morecomment    =[l]{//},
-  morecomment    =[s]{/*}{*/},
-  morestring     =[b]",
+  morekeywords={EFI_STATUS,CHAR16,UINTN,UINT32,EFI_GUID},
+  sensitive=true,
+  morecomment=[l]{//},
+  morecomment=[s]{/*}{*/},
+  morestring=[b]",
 }
+
+% Estilo genérico
 \lstset{
   basicstyle   =\ttfamily\small,
   numberstyle  =\tiny,
@@ -55,7 +61,48 @@
   captionpos   =b,
   keywordstyle =\color{blue},
   commentstyle =\itshape\color{gray!70},
-  language     =C      % Idioma por defecto; cambia con [language=NASM] cuando haga falta
+  language     =C
+}
+
+% Estilo para terminal (bash)
+\lstdefinestyle{BashInputStyle}{
+  language=Bash,
+  basicstyle=\small\ttfamily,
+  backgroundcolor=\color{lightgray!20},
+  frame=single, framerule=0.4pt, framesep=3pt,
+  xleftmargin=6pt, xrightmargin=6pt,
+  breaklines=true,
+  keywordstyle=\color{blue}\bfseries,
+  commentstyle=\color{green!60!black},
+  stringstyle=\color{purple},
+  numbers=none,
+  showstringspaces=false
+}
+
+% Lenguaje mínimo para comandos GDB
+\lstdefinelanguage{GDB}{
+  morekeywords={
+    target,remote,file,set,architecture,b,break,c,continue,
+    si,stepi,info,registers,print,x,s,delete,layout,quit
+  },
+  sensitive=false,
+  morecomment=[l]{\#},
+}
+
+\lstdefinestyle{GdbStyle}{
+  language=GDB,
+  basicstyle=\small\ttfamily,
+  backgroundcolor=\color{cyan!10},
+  frame=single, framerule=0.4pt, framesep=3pt,
+  xleftmargin=6pt, xrightmargin=6pt,
+  breaklines=true,
+  keywordstyle=\color{red!80!black}\bfseries,
+  commentstyle=\color{green!60!black},
+  stringstyle=\color{purple},
+  emph={ax,ah,al,bx,bh,bl,si,di,ds,es,cs,ss,ip,flags,zf,if},
+  emphstyle=\color{blue},
+  numbers=none,
+  showstringspaces=false
 }
 
 % ----------------------- Metadatos del documento ---------------------------
@@ -74,5 +121,7 @@
 \input{uefi}
 \input{coreboot}
 \input{linker}
+\input{direccion_7c00}
+\input{demostracion_practica} % ajusta/elimina si no lo usas
 
 \end{document}

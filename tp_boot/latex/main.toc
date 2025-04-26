@@ -10,3 +10,10 @@
 \contentsline {subsection}{\numberline {6.1}¿Qué es un linker?}{6}{subsection.6.1}%
 \contentsline {subsection}{\numberline {6.2}¿Qué hace?}{6}{subsection.6.2}%
 \contentsline {section}{\numberline {7}¿Qué es la dirección 0x7C00 y por qué es necesaria?}{7}{section.7}%
+\contentsline {section}{\numberline {8}Demostración Práctica: Compilación, Enlace y Depuración}{8}{section.8}%
+\contentsline {subsection}{\numberline {8.1}Compilación con el Ensamblador (as)}{8}{subsection.8.1}%
+\contentsline {subsection}{\numberline {8.2}Enlace con el Linker (ld)}{8}{subsection.8.2}%
+\contentsline {subsection}{\numberline {8.3}Verificación (objdump vs. hd)}{9}{subsection.8.3}%
+\contentsline {subsection}{\numberline {8.4}Depuración con QEMU y GDB}{9}{subsection.8.4}%
+\contentsline {subsubsection}{\numberline {8.4.1}Iniciar QEMU en modo depuración}{9}{subsubsection.8.4.1}%
+\contentsline {subsubsection}{\numberline {8.4.2}Sesión de GDB}{10}{subsubsection.8.4.2}%
