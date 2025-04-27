@@ -47,57 +47,58 @@ Este enfoque delega la compleja tarea de posicionamiento y resolución de direcc
 
 El núcleo de la transición reside en la función \texttt{switch\_to\_pm}, que realiza los siguientes pasos indispensables (sin macros):
 
-\begin{lstlisting}[style=NasmStyle,
-    caption={\texttt{switch\_to\_pm.asm} (Núcleo de la transición)}]
+\begin{lstlisting}[style=NasmStyle, breaklines=true,
+    caption={\texttt{switch\_to\_pm.asm} (Nucleo de la transicion)}]
 [bits 16]
 switch_to_pm:
-cli                         ; 1. Deshabilitar interrupciones enmascarables. CRUCIAL
-                 ;    para evitar que una IT ocurra durante la transición
-                 ;    cuando el estado de la CPU es inconsistente.
+cli                         ; 1. Deshabilitar interrupciones enmascarables.
+                            ;    para evitar que una IT ocurra durante la transicion
+                            ;    cuando el estado de la CPU es inconsistente.
 
 lgdt [gdt_descriptor]       ; 2. Cargar el Registro Descriptor de la GDT (GDTR).
-                 ;    Lee 6 bytes desde la dirección de la etiqueta 'gdt_descriptor'.
-                 ;    Esos 6 bytes contienen el límite (tamaño-1) de la GDT
-                 ;    y la dirección base lineal donde reside la GDT en memoria.
-                 ;    Esto le informa a la CPU dónde encontrar la tabla GDT.
+                            ;    Lee 6 bytes desde la direccion de la etiqueta 'gdt_descriptor'.
+                            ;    Esos 6 bytes contienen el limite (tamanio-1) de la GDT
+                            ;    y la direccion base lineal donde reside la GDT en memoria.
+                            ;    Esto informa a la CPU donde encontrar la tabla GDT.
 
 ; 3. Activar Modo Protegido (Bit PE en CR0)
 mov eax, cr0                ; 3a. Leer el registro de control CR0 en EAX (32 bits).
 or eax, 0x01                ; 3b. Poner el bit 0 (PE - Protection Enable) a 1 usando OR.
-                 ;     Los otros bits de CR0 se mantienen.
+                            ;     Los otros bits de CR0 se mantienen.
 mov cr0, eax                ; 3c. Escribir el valor modificado de vuelta a CR0.
-                 ;     ¡A partir de este instante, la CPU opera en Modo Protegido!
+                            ;     A partir de este instante, la CPU opera en Modo Protegido.
 
 ; 4. Salto Largo (Far Jump)
-;    Es OBLIGATORIO inmediatamente después de activar PE. Sirve para:
-;    a) Limpiar la cola de prefetch de instrucciones de la CPU, que podría
+;    Es OBLIGATORIO inmediatamente despues de activar PE. Sirve para:
+;    a) Limpiar la cola de prefetch de instrucciones de la CPU, que podria
 ;       contener instrucciones decodificadas como si fueran de Modo Real.
-;    b) Cargar el registro de segmento de Código (CS) con un SELECTOR válido
+;    b) Cargar el registro de segmento de Codigo (CS) con un SELECTOR valido
 ;       de nuestra nueva GDT.
-;    c) Transferir la ejecución al código diseñado para 32 bits.
-jmp 0x08 : init_pm          ; Salto a: Selector de Código (0x08, segundo descriptor)
-                 ;          Offset (dirección de la etiqueta 'init_pm')
+;    c) Transferir la ejecucion al codigo disenado para 32 bits.
+jmp 0x08 : init_pm          ; Salto a: Selector de Codigo (0x08, segundo descriptor)
+                            ;          Offset (direccion de la etiqueta 'init_pm')
 
-[bits 32]                       ; A partir de aquí, el ensamblador genera código de 32 bits
-init_pm:                        ; Punto de aterrizaje en Modo Protegido
+[bits 32]                   ; A partir de aqui, el ensamblador genera codigo de 32 bits
+init_pm:                    ; Punto de aterrizaje en Modo Protegido
 ; 5. Configurar Segmentos de Datos y Pila (32 bits)
 mov ax, 0x10                ; Cargar SELECTOR del segmento de Datos (0x10) en AX.
-                 ; Se usa AX (16 bits) porque los selectores son de 16 bits.
+                            ; Se usa AX (16 bits) porque los selectores son de 16 bits.
 mov ds, ax                  ; Cargar DS con el selector de datos.
 mov ss, ax                  ; Cargar SS (segmento de pila) con el mismo selector.
 mov es, ax                  ; Cargar ES.
 mov fs, ax                  ; Cargar FS (opcional).
 mov gs, ax                  ; Cargar GS (opcional).
-; Ahora todos los accesos a datos o pila usarán el descriptor GDT en el índice 2.
+; Ahora todos los accesos a datos o pila usaran el descriptor GDT en el indice 2.
 
 ; 6. Configurar el Puntero de Pila (ESP)
-mov esp, 0x90000            ; Establecer ESP (32 bits) a una dirección segura y válida
-                 ; (ej. 0x90000), ubicada dentro de los límites del
-                 ; segmento de datos/pila cargado en SS.
+mov esp, 0x90000            ; Establecer ESP (32 bits) a una direccion segura y valida
+                            ; (ej. 0x90000), ubicada dentro de los limites del
+                            ; segmento de datos/pila cargado en SS.
 
-; 7. Continuar con la ejecución en Modo Protegido
+; 7. Continuar con la ejecucion en Modo Protegido
 call BEGIN_PM               ; Llamar a la rutina principal de PM (en pm.asm)
 \end{lstlisting}
+
 
 \subsection{Programa con Descriptores de Código y Datos Diferenciados}
 
