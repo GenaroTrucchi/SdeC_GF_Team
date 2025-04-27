@@ -38,14 +38,15 @@ Para solucionar estos problemas, se adoptó un flujo de trabajo más robusto y e
             \item Resolver todas las direcciones (como la dirección de \texttt{gdt\_start} usada por \texttt{lgdt}, la dirección de \texttt{MSG\_REAL\_MODE} usada por \texttt{mov si}, y las direcciones de las funciones \texttt{print\_string} y \texttt{switch\_to\_pm} usadas por \texttt{call}) relativas a la base \texttt{0x7C00}.
             \item Asegurar que el archivo de salida tenga exactamente 512 bytes, añadiendo relleno si es necesario y la firma MBR \texttt{0xAA55} al final (usando \texttt{. = 0x7C00 + 510; BYTE(0x55) BYTE(0xAA);}).
         \end{itemize}
-        Comando: \texttt{ld -m elf\_i386 -T link.ld -o pm.elf pm.o}
-    \item \textbf{Extraer Binario Crudo:} Finalmente, se usó \texttt{objcopy} para extraer únicamente los bytes del código y datos enlazados del archivo \texttt{pm.elf} y volcarlos a la imagen binaria cruda final: \texttt{objcopy -O binary pm.elf pm.img}.
+        Comando: \texttt{ld -m elf\_i386 -T linker.ld -o pm.elf pm.o}
 \end{enumerate}
 Este enfoque delega la compleja tarea de posicionamiento y resolución de direcciones al linker (\texttt{ld}), que está diseñado específicamente para ello, resultando en un archivo \texttt{pm.img} correctamente estructurado y funcional.
 
 \subsubsection{Código de Transición Detallado (en \texttt{switch\_to\_pm.asm})}
 
 El núcleo de la transición reside en la función \texttt{switch\_to\_pm}, que realiza los siguientes pasos indispensables (sin macros):
+
+\newpage
 
 \begin{lstlisting}[style=NasmStyle, breaklines=true,
     caption={\texttt{switch\_to\_pm.asm} (Nucleo de la transicion)}]

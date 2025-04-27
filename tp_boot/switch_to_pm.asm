@@ -41,19 +41,6 @@ init_pm:
     ; 7. Llamar a la rutina principal de PM
     call BEGIN_PM               ; Salta a la etiqueta en pm.asm
 
-; --- Podrías añadir aquí el código de prueba de escritura si quieres ---
-; --- que esté en este archivo, o llamarlo desde BEGIN_PM ---
-;    ; Prueba de escritura R/W (debería funcionar)
-;    mov dword [0x2000], 0xCAFEBABE
-;
-;    ; Prueba de escritura R/O (cambiar a selector 0x18 - DESCOMENTAR descriptor en GDT)
-;    mov ax, 0x18 ; Selector R/O
-;    mov ds, ax
-;    mov dword [0x3000], 0xDEADBEEF ; <<< Causa #GP aquí
-;    ; ... colgarse si sobrevive (no debería)
-
-
-; --- Rutina Principal de Modo Protegido (definida aquí o en pm.asm) ---
 ; Esta etiqueta DEBE existir y ser alcanzable desde el `call BEGIN_PM` anterior
 BEGIN_PM:
     mov ebx, MSG_PROT_MODE      ; MSG_PROT_MODE debe estar accesible (en pm.asm)
@@ -64,9 +51,3 @@ BEGIN_PM:
     cli
     hlt
     jmp .hang_pm
-
-; --- Mensajes de Debug (opcional) ---
-; DEBUG_MSG_GDT_LOAD db "Cargando GDT...", 0
-
-; Incluir la impresión PM (o definirla globalmente si está en otro archivo)
-; %include "print_string_pm.asm" ; Ya incluido al principio

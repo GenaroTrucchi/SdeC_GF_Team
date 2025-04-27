@@ -38,6 +38,3 @@ _start:
 ; --- Datos (terminarán en la sección .text también) ---
 MSG_REAL_MODE db "Comienza en 16-bit Modo Real", 0
 MSG_PROT_MODE db "Paso exitosamente a 32-bit Modo protegido", 0
-
-; --- La pila se reserva implícitamente por el linker en .bss o .text ---
-; --- Relleno y firma serán manejados por el linker script ---

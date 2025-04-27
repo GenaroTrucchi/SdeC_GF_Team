@@ -32,15 +32,6 @@ gdt_start:
     db 0xCF                     ; Flags(G=1, D=1 -> 32bit) + Limit(16-19)=1111
     db 0x00                     ; Base (24-31)
 
-    ; >> Puedes añadir aquí el descriptor Read-Only si lo necesitas para el test <<
-    ; Descriptor 3: Datos Read-Only (0x18) - 8 bytes (Opcional para test)
-    ; gdt_data_ro:
-    ; dw 0xFFFF
-    ; dw 0x0000
-    ; db 0x00
-    ; db 0x90                     ; Access Byte (Present=1, DPL=0, Data, Write=0 -> R/O)
-    ; db 0xCF
-    ; db 0x00
 
 gdt_end:
 
@@ -48,10 +39,3 @@ gdt_end:
 gdt_descriptor:
     dw gdt_end - gdt_start - 1  ; Límite (tamaño en bytes - 1)
     dd gdt_start                ; Dirección base lineal (será calculada por linker)
-
-; --- Selectores (Calculados automáticamente por el linker) ---
-; No usamos 'equ' aquí porque las direcciones finales las decide el linker.
-; Los selectores fijos (0x08, 0x10, 0x18) se usarán directamente en switch_to_pm.
-; CODE_SELECTOR equ 0x08 ; Usar el valor directamente
-; DATA_SELECTOR equ 0x10 ; Usar el valor directamente
-; DATA_RO_SELECTOR equ 0x18 ; (Si se añade descriptor 3)
