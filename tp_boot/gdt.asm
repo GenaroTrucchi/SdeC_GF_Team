@@ -32,6 +32,15 @@ gdt_start:
     db 0xCF                     ; Flags(G=1, D=1 -> 32bit) + Limit(16-19)=1111
     db 0x00                     ; Base (24-31)
 
+    ; Descriptor 3: Datos Read-Only (0x18) - 8 bytes <<< AÑADIDO/ACTIVADO >>>
+    ; Base=0, Limit=4GB, Access=0x90 (Data, Read-Only), Flags=0xCF
+    gdt_data_ro:                ; <<< Etiqueta para el nuevo descriptor >>>
+    dw 0xFFFF                   ; Limite (0-15)
+    dw 0x0000                   ; Base (0-15)
+    db 0x00                     ; Base (16-23)
+    db 0x90                     ; Access Byte (Present=1, DPL=0, Data, Writable = 0 -> R/O!)
+    db 0xCF                     ; Flags(G=1, D=1 -> 32bit) + Limit(16-19)=1111
+    db 0x00                     ; Base (24-31)
 
 gdt_end:
 

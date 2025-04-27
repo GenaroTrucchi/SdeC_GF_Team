@@ -25,3 +25,9 @@
 \contentsline {subsubsection}{\numberline {9.1.4}Código de Transición Detallado (en \texttt {switch\_to\_pm.asm})}{14}{subsubsection.9.1.4}%
 \contentsline {subsection}{\numberline {9.2}Programa con Descriptores de Código y Datos Diferenciados}{16}{subsection.9.2}%
 \contentsline {subsubsection}{\numberline {9.2.1}Espacios de Memoria Diferenciados (Concepto vs. Implementación Plana)}{17}{subsubsection.9.2.1}%
+\contentsline {section}{\numberline {10}Prueba de Protección de Memoria (Segmento Read-Only)}{18}{section.10}%
+\contentsline {subsection}{\numberline {10.1}Modificaciones al Código}{18}{subsection.10.1}%
+\contentsline {subsection}{\numberline {10.2}Ejecución y Resultados: ¿Qué Sucede?}{19}{subsection.10.2}%
+\contentsline {subsection}{\numberline {10.3}¿Qué Debería Suceder a Continuación (Teoría del Fallo)?}{20}{subsection.10.3}%
+\contentsline {subsection}{\numberline {10.4}Verificación con GDB}{21}{subsection.10.4}%
+\contentsline {subsection}{\numberline {10.5}Valor y Propósito de los Selectores en Modo Protegido}{21}{subsection.10.5}%

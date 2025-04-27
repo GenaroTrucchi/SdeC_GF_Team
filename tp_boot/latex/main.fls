@@ -290,6 +290,11 @@ INPUT ./desafio.tex
 INPUT ./desafio.tex
 INPUT desafio.tex
 INPUT /usr/share/texlive/texmf-dist/fonts/tfm/jknappen/ec/ecrm0600.tfm
+INPUT ./images/switchtopm.png
+INPUT ./images/switchtopm.png
+INPUT ./images/switchtopm.png
+INPUT ./images/switchtopm.png
+INPUT ./images/switchtopm.png
 INPUT main.aux
 INPUT ./main.out
 INPUT ./main.out

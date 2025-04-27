@@ -1,5 +1,5 @@
 # Fdb version 4
-["pdflatex"] 1745768189.84677 "/home/agustin/Documents/importante/facultad/sistemasDeComputacion/SdeC_GF_Team/tp_boot/latex/main.tex" "main.pdf" "main" 1745768192.06694 0
+["pdflatex"] 1745778319.86753 "/home/agustin/Documents/importante/facultad/sistemasDeComputacion/SdeC_GF_Team/tp_boot/latex/main.tex" "main.pdf" "main" 1745778322.14387 0
   "/etc/texmf/web2c/texmf.cnf" 1725376857.69937 475 c0e671620eb5563b2130f56340a5fde8 ""
   "/home/agustin/Documents/importante/facultad/sistemasDeComputacion/SdeC_GF_Team/tp_boot/latex/main.tex" 1745767951.38859 3704 dfdc74a6d76b32da885d5168899555b5 ""
   "/usr/share/texlive/texmf-dist/fonts/map/fontname/texfonts.map" 1577235249 3524 cb3e574dea2d1052e39280babc910dc8 ""
@@ -132,18 +132,19 @@
   "/var/lib/texmf/web2c/pdftex/pdflatex.fmt" 1725377137 8215932 e9eb5faffbc8259faad4be928cf360cc ""
   "caratula.tex" 1745441607.28878 917 fe749e0547dcdade507af61eeee16ad4 ""
   "coreboot.tex" 1745675672.29731 1721 4d48dd6c6ebe9610325326a1730ea93a ""
-  "desafio.tex" 1745768189.46281 13401 1b3cefa7d60ebfb3eb78b41e0ef972e1 ""
+  "desafio.tex" 1745778319.521 26780 ccabe9ea2bc57e2a513533655a4ec14f ""
   "images/break7C00.png" 1745678916.92889 70112 62c65cef667d8226c9987266032a6fa7 ""
   "images/bucle.png" 1745679946.35181 12073 ddbbdab6b33d27a29cf5a559b57af152 ""
   "images/logo2.png" 1745439921.35211 367116 38be5dac9119e7b1641b1a984f09afd9 ""
   "images/registers7c00.png" 1745679567.0396 33560 032618aa473995d89c287731ea63a1e1 ""
   "images/resultado.png" 1745681323.31634 7936 5930f9d9024a7ca537cd33aae8f9c241 ""
+  "images/switchtopm.png" 1745768697.32493 7129 20ddd6cc176e218fa1c8588c91dd3817 ""
   "introduccion.tex" 1745675092.82583 303 b895f97c0b96da8e497efab082496d16 ""
   "linker.tex" 1745767951.35759 13827 80d0e698974e3bc9680cc3518a365345 ""
-  "main.aux" 1745768191.86284 5951 7f26d1839a83a9f0c4b31966b8bdd884 "pdflatex"
-  "main.out" 1745768191.86684 6463 69da5b58df2da3c73941f4a7cfa82a67 "pdflatex"
+  "main.aux" 1745778321.90496 7361 9be30e892925c3a3d92f4d5b69947217 "pdflatex"
+  "main.out" 1745778321.90896 8143 fb2b2723e0089ca8455b77c09f1c5ec3 "pdflatex"
   "main.tex" 1745767951.38859 3704 dfdc74a6d76b32da885d5168899555b5 ""
-  "main.toc" 1745768191.86684 2695 e2b2ea4882fd999c3d860081c87469ea "pdflatex"
+  "main.toc" 1745778321.90996 3351 149b1ad698465794ae46d0eddf73e227 "pdflatex"
   "uefi.tex" 1745675626.23684 7877 b085b6469a81f3b87ba8db55dbcbf4c9 ""
   (generated)
   "main.aux"

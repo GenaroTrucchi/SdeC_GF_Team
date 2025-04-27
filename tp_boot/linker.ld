@@ -1,32 +1,22 @@
-/* link.ld - Para MBR usando NASM ELF y ld */
-OUTPUT_FORMAT(binary)   /* Salida binaria cruda */
-ENTRY(_start)           /* Punto de entrada definido en pm.asm */
+/* linker.ld - Para generar ELF intermedio */
+OUTPUT_FORMAT(elf32-i386)  /* <<--- CAMBIADO A ELF */
+OUTPUT_ARCH(i386)         /* Añadir por claridad */
+ENTRY(_start)
 
 SECTIONS
 {
-    /* Dirección de carga para el MBR */
-    . = 0x7C00;
+    . = 0x7C00; /* Dirección virtual/física base */
 
-    /* Sección principal donde irá todo */
-    .text : AT(0x7C00)
+    .text : AT(ADDR(.text)) /* Cargar en la dirección física correcta */
     {
-        *(.text)
-        *(.data)
-        *(.rodata*)
-        *(.bss)
-        *(COMMON)
+        *(.text) *(.data) *(.rodata*) /* Combina secciones aquí */
     }
 
-    /* Forzar tamaño a 510 bytes primero */
-    . = 0x7c00 + 510;
-
-    /* Ahora manualmente agregar firma */
-    .signature :
+    .bss : AT(ADDR(.bss)) ALIGN(4) /* Sección BSS si la hubiera */
     {
-        BYTE(0x55)
-        BYTE(0xAA)
+         *(.bss) *(COMMON)
     }
 
-    /* Opcional: Verificación estricta */
-    /* ASSERT(. == 0x7c00 + 512, "Error: MBR debe ser 512 bytes!") */
+     /* NO pongas la firma aquí, déjaselo a objcopy o a un paso final */
+     /* El tamaño lo gestiona objcopy al extraer */
 }

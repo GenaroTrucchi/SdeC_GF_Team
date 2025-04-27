@@ -1,0 +1,62 @@
+#############################################################################
+#  Bochs 2.x · Configuración mínima para laboratorio de SO / Bootloader
+#  (guarda este bloque como .bochsrc en el mismo directorio que pm_final.img)
+#############################################################################
+
+##########################
+#  Memoria y CPU
+##########################
+# 32 MiB de RAM son más que suficientes para real/protected-mode early boot.
+megs: 32           # → sección 4.3.5 :contentReference[oaicite:0]{index=0}
+
+# CPU emulada. “i386” es compatible con todo tu código de 16 / 32 bit.
+# Si quieres CPUID moderno, cambia a p3_katmai, core2_penryn_t9600, etc.
+cpu: model=pentium, ips=10000000
+
+##########################
+#  BIOS ROMs
+##########################
+# $BXSHARE apunta a /usr/share/bochs en la mayoría de distros.
+romimage:    file=$BXSHARE/BIOS-bochs-latest
+vgaromimage: file=$BXSHARE/VGABIOS-lgpl-latest
+
+##########################
+#  Unidades y orden de arranque
+##########################
+# Tu binario de 512 bytes con firma 55 AA
+floppya: 1_44="pm_final.img", status=inserted
+boot: floppy
+
+##########################
+#  Interfaz gráfica / depuración
+##########################
+display_library: x, options="gui_debug"   # Ventana X11 con debug GUI
+mouse: enabled=0                          # No necesitas ratón aún
+
+# Si prefieres SDL 2 (pleno-pantalla opcional):
+# display_library: sdl2, options="fullscreen gui_debug"
+
+##########################
+#  Registro y diagnóstico
+##########################
+log: bochsout.txt          # Log completo en fichero
+panic:  action=ask         # Pregunta en caja de diálogo ante Pánico
+error:  action=report      # Muestra errores normales
+info:   action=report
+debug:  action=ignore      # Cambia a report si quieres el bombardeo completo
+
+# Para ver *todas* las excepciones de CPU / segmentación:
+# debug: action=report
+# breakpoint: vector=13    # pausa en #GP
+
+# Extra: puente de texto ultra-temprano (out 0xE9, muy útil para tu kernel)
+port_e9_hack: enabled=1
+
+##########################
+#  Consola Bochs / Atajos
+##########################
+# Abre la consola interna con Ctrl-C en la ventana X y teclea:
+#   info cpu        – registros
+#   c               – continuar
+#   help            – más comandos
+#############################################################################
