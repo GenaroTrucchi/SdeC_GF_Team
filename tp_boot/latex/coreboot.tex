@@ -1,0 +1,33 @@
+\section{coreboot}
+
+\textbf{¿Qué es coreboot?}  
+coreboot es un proyecto de firmware libre y minimalista que reemplaza el BIOS/UEFI propietario. Su filosofía es inicializar únicamente el hardware esencial (CPU, RAM, chipset básico) y luego transferir el control a un \emph{payload} especializado.
+
+\medskip
+\textbf{Payloads comunes:}
+\begin{itemize}[noitemsep]
+  \item \texttt{SeaBIOS}: interfaz BIOS tradicional para compatibilidad con SOs antiguos.
+  \item \texttt{TianoCore (EDK II)}: implementación de UEFI completa para SOs modernos.
+  \item \texttt{GRUB2} / \texttt{U-Boot}: cargadores de arranque con gran flexibilidad.
+  \item \texttt{LinuxBoot}: utiliza el kernel de Linux como payload para entornos Linux “bare-metal”.
+\end{itemize}
+
+\newpage
+
+\medskip
+\textbf{Productos que lo incorporan:}
+\begin{itemize}[noitemsep]
+  \item \emph{Chromebooks} de Google (firmware estándar).
+  \item Laptops y desktops de fabricantes enfocados en Linux / privacidad (System76, Purism).
+  \item Diversos sistemas embebidos, routers, servidores y dispositivos de red.
+  \item Comunidad de porting a placas base de escritorio y portátiles de múltiples marcas.
+\end{itemize}
+
+\medskip
+\textbf{Ventajas de su utilización:}
+\begin{itemize}[noitemsep]
+  \item \emph{Velocidad de arranque} muy superior al firmware propietario.
+  \item \emph{Flexibilidad y personalización}: elección de payloads y fácil adaptación al hardware.
+  \item \emph{Seguridad y transparencia}: código auditables, menor superficie de ataque (aunque a veces requiere \emph{blobs} propietarios para componentes críticos).
+  \item \emph{Control total} sobre el proceso de arranque y eliminación de código heredado innecesario.
+\end{itemize}

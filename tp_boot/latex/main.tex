@@ -1,0 +1,138 @@
+% main.tex
+% ============================================================================
+% TP Sistemas de Computación – Informe completo
+% Índice: GINI + Python + C (32 bits) + Ensamblador NASM + GDB
+% ============================================================================
+\documentclass[a4paper,12pt]{article}
+
+% ----------------------- Paquetes básicos ----------------------------------
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[spanish]{babel}
+\usepackage{graphicx}
+\usepackage{subcaption}
+\usepackage{caption}
+\usepackage{listings}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{float}
+\usepackage{geometry}
+\usepackage{fancyhdr}
+\usepackage{enumitem}
+\usepackage{booktabs}
+\usepackage[hidelinks]{hyperref}
+\usepackage{cleveref}
+\usepackage{xcolor}
+
+% ----------------------- Configuración global ------------------------------
+\geometry{margin=2.5cm}
+\graphicspath{{images/}}
+\pagestyle{fancy}
+\fancyhf{}
+\lhead{Boot}
+\rhead{TP Sistemas de Computación}
+\cfoot{\thepage}
+
+% ----------------------- Listings: lenguajes -------------------------------
+\lstdefinelanguage{NASM}{
+  morekeywords={section,global,extern,cli,sti,lgdt,lidt,add,and,or,jmp,call,
+                mov,push,pop,ret,pusha,pushad,popa,popad},
+  sensitive=true,
+  morecomment=[l]{;},
+  morestring=[b]',
+}
+\lstdefinelanguage{C}{
+  morekeywords={EFI_STATUS,CHAR16,UINTN,UINT32,EFI_GUID,while,if,return,void,int},
+  sensitive=true,
+  morecomment=[l]{//},
+  morecomment=[s]{/*}{*/},
+  morestring=[b]',
+}
+\lstdefinelanguage{GDB}{
+  morekeywords={target,remote,file,set,architecture,b,break,c,continue,
+    si,stepi,info,registers,print,x,s,delete,layout,quit},
+  sensitive=false,
+  morecomment=[l]{\#},
+}
+
+% ----------------------- Listings: estilos ---------------------------------
+\lstdefinestyle{NasmStyle}{
+  language=NASM,
+  basicstyle   =\ttfamily\small,
+  numberstyle  =\tiny,
+  numbers      =left,
+  stepnumber   =1,
+  frame        =single,
+  captionpos   =b,
+  keywordstyle =\color{blue},
+  commentstyle =\itshape\color{gray!70},
+  showstringspaces=false,
+  extendedchars=true
+}
+\lstdefinestyle{CStyle}{
+  language=C,
+  basicstyle   =\ttfamily\small,
+  numbers      =left,
+  frame        =single,
+  keywordstyle =\color{blue},
+  commentstyle =\itshape\color{gray!70},
+  showstringspaces=false
+}
+\lstdefinestyle{BashInputStyle}{
+  language=Bash,
+  basicstyle=\small\ttfamily,
+  backgroundcolor=\color{lightgray!20},
+  frame=single, framerule=0.4pt, framesep=3pt,
+  xleftmargin=6pt, xrightmargin=6pt,
+  breaklines=true,
+  keywordstyle=\color{blue}\bfseries,
+  commentstyle=\color{green!60!black},
+  stringstyle=\color{purple},
+  numbers=none,
+  showstringspaces=false
+}
+\lstdefinestyle{GdbStyle}{
+  language=GDB,
+  basicstyle  =\small\ttfamily,
+  backgroundcolor=\color{cyan!10},
+  frame       =single, framerule=0.4pt, framesep=3pt,
+  xleftmargin =6pt, xrightmargin=6pt,
+  breaklines  =true,
+  keywordstyle=\color{red!80!black}\bfseries,
+  commentstyle=\color{green!60!black},
+  stringstyle =\color{purple},
+  numbers     =none,
+  showstringspaces=false
+}
+
+% Estilo por defecto si olvidas 'style='
+\lstset{
+  basicstyle=\ttfamily\small,
+  frame=single,
+  captionpos=b
+}
+
+% ----------------------- Metadatos del documento ---------------------------
+\title{\textbf{TP Sistemas de Computación}\\\large Práctico: UEFI / Bootloader en NASM}
+\author{Alumno: Nombre Apellido \\ Materia: Sistemas de Computación \\ Comisión: XX}
+\date{\today}
+
+% ----------------------- Inicio del documento ------------------------------
+\begin{document}
+
+\input{caratula}
+
+\tableofcontents
+\clearpage
+
+
+\input{introduccion}
+\input{uefi}
+\input{coreboot}
+\input{linker}
+\input{bootloader}
+\newpage
+\input{desafio}
+\input{conclusion}
+
+\end{document}

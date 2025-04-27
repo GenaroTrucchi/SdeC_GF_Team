@@ -1,0 +1,130 @@
+\section{¿Qué es UEFI?}
+
+UEFI (\emph{Unified Extensible Firmware Interface}) es la especificación que define una
+interfaz de software moderna entre el firmware de la plataforma (antes BIOS) y el
+sistema operativo. A diferencia del BIOS tradicional, UEFI:
+\begin{itemize}[noitemsep]
+  \item Está escrito en C y opera en modo 32 o 64 bits.
+  \item Ofrece controladores propios para hardware básico (red, almacenamiento, gráficos).
+  \item Soporta particiones GPT (superando el límite de 2 TB de MBR).
+  \item Incorpora un entorno seguro (\emph{Secure Boot}) y gestión de clave pública.
+  \item Se organiza en \emph{Boot Services} (solo durante el arranque) y
+        \emph{Runtime Services} (disponibles para el SO tras el \texttt{ExitBootServices}).
+\end{itemize}
+
+\subsection{¿Cómo puedo usarlo?}
+
+\subsubsection*{Como usuario final}
+\begin{enumerate}[noitemsep]
+  \item Durante el arranque, pulsar la tecla indicada (DEL, F2, F10, F12, ESC) para
+        entrar en el \emph{Setup} de UEFI.
+  \item Desde allí se puede:
+    \begin{itemize}[noitemsep]
+      \item Cambiar el orden de arranque.
+      \item Habilitar/deshabilitar \emph{Secure Boot}.
+      \item Ajustar parámetros de hardware (incluido overclocking).
+    \end{itemize}
+  \item En sistemas UNIX-like, utilidades como \texttt{efibootmgr} permiten listar y
+        modificar entradas UEFI desde el sistema operativo.
+\end{enumerate}
+
+\subsubsection*{Como desarrollador / cargador de arranque}
+\begin{enumerate}[noitemsep]
+  \item El firmware UEFI pasa al cargador una estructura \texttt{EFI\_SYSTEM\_TABLE},
+        que incluye punteros a:
+    \begin{itemize}[noitemsep]
+      \item \texttt{BootServices} (servicios disponibles solo durante el arranque).
+      \item \texttt{RuntimeServices} (servicios que perduran tras el \texttt{ExitBootServices}).
+    \end{itemize}
+  \item Para invocar una rutina UEFI, se localiza el puntero en la tabla de servicios
+        y se llama en C/C++ correctamente, respetando la ABI UEFI
+        (registro de parámetros, alineamiento, etc.).
+\end{enumerate}
+
+\newpage
+
+\subsection{Ejemplo de llamada a función UEFI}
+
+Una aplicación UEFI puede acceder a las variables persistentes almacenadas en la NVRAM (Non-Volatile RAM) mediante los \emph{Runtime Services}, que son parte del entorno estándar definido por la especificación UEFI. A continuación, se muestra un ejemplo de cómo utilizar la función \texttt{GetVariable} para leer la variable global \texttt{BootOrder}, la cual contiene el orden de dispositivos para el arranque del sistema. Esta función está documentada en la sección correspondiente de la especificación oficial UEFI.
+\begin{lstlisting}[language=C,
+                   caption={Lectura de la variable \texttt{BootOrder}},
+                   label={lst:getvariable}]
+#include <Uefi.h>
+#include <Library/UefiLib.h>
+#include <Library/UefiBootServicesTableLib.h>
+
+extern EFI_GUID gEfiGlobalVariableGuid;
+
+EFI_STATUS LeerBootOrder(VOID)
+{
+    EFI_STATUS status;
+    CHAR16 *VariableName = L"BootOrder";
+    UINTN DataSize = sizeof(UINT16) * 16;     // espacio para 16 entradas
+    UINT16 BootOrder[16];
+    UINT32 Attributes;
+
+    status = gST->RuntimeServices->GetVariable(
+        VariableName,
+        &gEfiGlobalVariableGuid,
+        &Attributes,
+        &DataSize,
+        BootOrder
+    );
+
+    if (EFI_ERROR(status)) {
+        Print(L"Error al leer BootOrder: %r\n", status);
+        return status;
+    }
+    // Procesar BootOrder...
+    return EFI_SUCCESS;
+}
+\end{lstlisting}
+
+\noindent Más detalles en la
+\href{https://uefi.org/specs/UEFI/2.10/08_Services_Runtime_Services.html}%
+      {\textcolor{blue}{especificación oficial}}.
+
+\newpage
+
+\section{Casos de bugs de UEFI explotables}
+Los bugs en UEFI son particularmente peligrosos porque el firmware se ejecuta antes que el sistema operativo y con privilegios muy altos (equivalente a Ring $-2$ o superior, conceptualmente). Explotarlos puede llevar a ataques muy persistentes y sigilosos (bootkits). Algunos casos notables:
+
+\begin{itemize}[noitemsep]
+  \item \textbf{LoJax (2018)}: considerado el primer rootkit UEFI in the wild', usado por el grupo APT28 (Fancy Bear). Modificaba directamente la SPI flash del firmware para inyectar un módulo malicioso que persistía incluso tras reinstalar el sistema operativo o cambiar el disco duro. Aprovechaba vulnerabilidades y configuraciones inseguras que permitían escritura no autorizada en la flash de firmware.
+
+  \item \textbf{MosaicRegressor (2020)}: framework de spyware basado en UEFI desarrollado por HackingTeam. Utilizaba imágenes de firmware comprometidas para reinstalar el malware en el sistema operativo cada vez que se eliminaba, asegurando persistencia a nivel de firmware.
+
+  \item \textbf{ThinkPwn (2016)}: vulnerabilidad en ciertos firmwares de Lenovo (y potencialmente otros fabricantes) en la gestión de llamadas SMM (System Management Mode). Permitía a un atacante con privilegios de administrador en el SO escalar a SMM, desde donde podía modificar el firmware UEFI protegido.
+
+  \item \textbf{LogoFAIL (2023)}: conjunto de desbordamientos de búfer en parsers de imágenes de logo personalizados usados por muchos fabricantes de UEFI durante la fase DXE (Driver Execution Environment). Un atacante podía cargar una imagen de logo maliciosa que explotara este bug, obteniendo ejecución de código arbitrario en arranque temprano.
+
+  \item \textbf{Vulnerabilidades en drivers UEFI específicos}: de forma recurrente se descubren bugs (por ejemplo, buffer overflows) en drivers de red, USB, almacenamiento, etc. Si un atacante controla los datos procesados por estos drivers (p. ej. un USB malicioso o un paquete de red manipulado), puede desencadenar la vulnerabilidad y ejecutar código con privilegios de firmware.
+\end{itemize}
+
+\newpage
+
+\section{Converged Security and Management Engine (CSME) e Intel Management Engine BIOS Extension (MEBx)}
+
+\textbf{Converged Security and Management Engine (CSME) / Intel Management Engine (ME):}  
+Es un subsistema de microcontrolador autónomo integrado en el chipset (Platform Controller Hub, PCH) de la mayoría de las placas base Intel desde 2006/2008. Funciona de forma independiente de la CPU y del sistema operativo, con su propio firmware (basado en MINIX), memoria y acceso directo a hardware crítico (RAM, red, periféricos). Sus principales funciones son:
+\begin{itemize}[noitemsep]
+  \item \emph{Intel Active Management Technology (AMT):} administración remota fuera de banda (OOB) — encender/apagar, consola remota, incluso si el SO no responde.
+  \item \emph{Inicialización temprana de hardware:} parte de la configuración del sistema antes de que el BIOS/UEFI principal tome el control.
+  \item \emph{Funciones de seguridad:}  
+    \begin{itemize}[noitemsep]
+      \item Intel Boot Guard: verifica la firma criptográfica del firmware UEFI.
+      \item Intel Platform Trust Technology (PTT): implementación de TPM en firmware.
+      \item Gestión de DRM (Protected Audio Video Path, PAVP), etc.
+    \end{itemize}
+\end{itemize}
+Su naturaleza de “caja negra” propietaria con acceso privilegiado ha generado preocupaciones de seguridad; a lo largo de los años se han descubierto vulnerabilidades críticas en el ME/CSME.
+
+\medskip
+\textbf{Intel Management Engine BIOS Extension (MEBx):}  
+Es el módulo de configuración integrado en el firmware principal (BIOS/UEFI) que permite ajustar las funciones del ME/AMT. Se accede normalmente al presionar \texttt{Ctrl+P} (o la combinación específica del fabricante) durante el POST. Desde MEBx se puede:
+\begin{itemize}[noitemsep]
+  \item Habilitar/deshabilitar AMT.
+  \item Configurar parámetros de red para gestión OOB (dirección IP, VLAN, DNS).
+  \item Establecer contraseñas y políticas de acceso al ME.
+  \item Activar KVM remoto y otras opciones avanzadas de control.
+\end{itemize}
