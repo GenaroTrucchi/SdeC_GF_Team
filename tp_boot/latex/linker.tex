@@ -29,6 +29,3 @@ La dirección \texttt{0x7C00} es un estándar histórico en la arquitectura x86 
 
   \item \textbf{Evitar desajustes catastróficos:} Si el linker no supiera esta dirección, asumiría una base por defecto (normalmente 0). El BIOS cargaría el código en \texttt{0x7C00}, pero las direcciones binarias incluidas seguirían apuntando al origen equivocado, haciendo que cualquier acceso a datos o saltos termine en memoria incorrecta y provoque un fallo inmediato.
 \end{itemize}
-
-
-\end{document}

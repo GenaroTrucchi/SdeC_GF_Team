@@ -1,0 +1,23 @@
+\section{Conclusiones}
+
+El presente trabajo práctico permitió recorrer desde los conceptos teóricos de la arquitectura \textbf{UEFI} hasta la implementación y prueba de un \emph{bootloader} propio, revelando la interacción detallada entre firmware, herramientas de \emph{toolchain} y hardware.
+
+\begin{itemize}
+  \item \textbf{UEFI como reemplazo de BIOS}. Comprendimos que UEFI no es una simple evolución sino una plataforma firmware escrita en~C, capaz de operar en 32~/ 64~bits, con servicios de arranque y ejecución en tiempo de \emph{runtime}, soporte GPT, \emph{Secure Boot} y controladores integrados. Aprender a invocar sus tablas (\texttt{BootServices} y \texttt{RuntimeServices}) habilita el desarrollo de utilidades de muy bajo nivel que conviven con el sistema operativo.
+  \item \textbf{Superficie de ataque y riesgos}. Casos como \emph{LoJax}, \emph{ThinkPwn} o \emph{LogoFAIL} evidencian que vulnerar el firmware permite \emph{bootkits} persistentes aun tras reinstalar el SO. La seguridad del arranque exige tanto configuraciones correctas (protección de la flash) como la aplicación oportuna de parches.
+  \item \textbf{CSME / ME y MEBx}. Las funciones de gestión remota (AMT) y arranque verificado (Boot Guard) ofrecen ventajas, pero el motor autónomo de Intel sigue siendo una \emph{caja negra} con fallos críticos publicados. Conocer MEBx resulta clave para equilibrar administración y exposición al riesgo.
+  \item \textbf{coreboot: firmware libre}. coreboot demuestra que es posible reemplazar firmware propietario por una solución mínima y auditada, con arranques más veloces y menor superficie de ataque, manteniendo la flexibilidad gracias a los \emph{payloads} (SeaBIOS, TianoCore, LinuxBoot, etc.).
+  \item \textbf{Herramientas de \emph{toolchain}}. Revisar el \texttt{linker} y la convención histórica de 0x7C00 mostró que los scripts de enlace son tan cruciales como el código; si el \emph{linker} desconoce la dirección final, los desplazamientos fallan y el arranque se aborta.
+  \item \textbf{Bootloader ``HELLO''}. Desde ensamblar 512~bytes y firmarlos con \texttt{0xAA55}, hasta probar en QEMU y grabar en un pendrive, cerramos el ciclo completo: escribir, enlazar, testear y ejecutar código que arranca sin sistema operativo.
+\end{itemize}
+
+En síntesis, el TP consolidó cuatro competencias centrales:
+\begin{enumerate}
+  \item Comprender el flujo de arranque, desde el encendido hasta la entrega de control al SO.
+  \item Escribir y depurar código de muy bajo nivel (ASM y~C con conciencia de firmware).
+  \item Reconocer amenazas y aplicar contramedidas en el firmware (UEFI, CSME/ME, Secure Boot).
+  \item Valorar alternativas \emph{open source} como coreboot para lograr transparencia y control.
+\end{enumerate}
+
+Dominar estos pilares habilita tanto el desarrollo cercano al hardware como la auditoría y protección de la primera línea de defensa en sistemas informáticos modernos.
+
