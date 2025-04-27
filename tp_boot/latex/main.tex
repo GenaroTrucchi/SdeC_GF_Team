@@ -1,9 +1,9 @@
+% main.tex
 % ============================================================================
 % TP Sistemas de Computación – Informe completo
 % Índice: GINI + Python + C (32 bits) + Ensamblador NASM + GDB
 % ============================================================================
 \documentclass[a4paper,12pt]{article}
-\catcode`\_=12
 
 % ----------------------- Paquetes básicos ----------------------------------
 \usepackage[utf8]{inputenc}
@@ -33,26 +33,31 @@
 \rhead{TP Sistemas de Computación}
 \cfoot{\thepage}
 
-% ----------------------- Listings ------------------------------------------
-% Lenguaje NASM
+% ----------------------- Listings: lenguajes -------------------------------
 \lstdefinelanguage{NASM}{
-  morekeywords={section,global,extern,fld,fistp,add,leave,ret,push,mov,sub},
+  morekeywords={section,global,extern,cli,sti,lgdt,lidt,add,and,or,jmp,call,
+                mov,push,pop,ret,pusha,pushad,popa,popad},
   sensitive=true,
   morecomment=[l]{;},
-  morestring=[b]",
+  morestring=[b]',
 }
-
-% Lenguaje C (para fragmentos UEFI)
 \lstdefinelanguage{C}{
-  morekeywords={EFI_STATUS,CHAR16,UINTN,UINT32,EFI_GUID},
+  morekeywords={EFI_STATUS,CHAR16,UINTN,UINT32,EFI_GUID,while,if,return,void,int},
   sensitive=true,
   morecomment=[l]{//},
   morecomment=[s]{/*}{*/},
-  morestring=[b]",
+  morestring=[b]',
+}
+\lstdefinelanguage{GDB}{
+  morekeywords={target,remote,file,set,architecture,b,break,c,continue,
+    si,stepi,info,registers,print,x,s,delete,layout,quit},
+  sensitive=false,
+  morecomment=[l]{\#},
 }
 
-% Estilo genérico
-\lstset{
+% ----------------------- Listings: estilos ---------------------------------
+\lstdefinestyle{NasmStyle}{
+  language=NASM,
   basicstyle   =\ttfamily\small,
   numberstyle  =\tiny,
   numbers      =left,
@@ -61,10 +66,17 @@
   captionpos   =b,
   keywordstyle =\color{blue},
   commentstyle =\itshape\color{gray!70},
-  language     =C
+  showstringspaces=false
 }
-
-% Estilo para terminal (bash)
+\lstdefinestyle{CStyle}{
+  language=C,
+  basicstyle   =\ttfamily\small,
+  numbers      =left,
+  frame        =single,
+  keywordstyle =\color{blue},
+  commentstyle =\itshape\color{gray!70},
+  showstringspaces=false
+}
 \lstdefinestyle{BashInputStyle}{
   language=Bash,
   basicstyle=\small\ttfamily,
@@ -78,35 +90,29 @@
   numbers=none,
   showstringspaces=false
 }
-
-% Lenguaje mínimo para comandos GDB
-\lstdefinelanguage{GDB}{
-  morekeywords={
-    target,remote,file,set,architecture,b,break,c,continue,
-    si,stepi,info,registers,print,x,s,delete,layout,quit
-  },
-  sensitive=false,
-  morecomment=[l]{\#},
-}
-
 \lstdefinestyle{GdbStyle}{
   language=GDB,
-  basicstyle=\small\ttfamily,
+  basicstyle  =\small\ttfamily,
   backgroundcolor=\color{cyan!10},
-  frame=single, framerule=0.4pt, framesep=3pt,
-  xleftmargin=6pt, xrightmargin=6pt,
-  breaklines=true,
+  frame       =single, framerule=0.4pt, framesep=3pt,
+  xleftmargin =6pt, xrightmargin=6pt,
+  breaklines  =true,
   keywordstyle=\color{red!80!black}\bfseries,
   commentstyle=\color{green!60!black},
-  stringstyle=\color{purple},
-  emph={ax,ah,al,bx,bh,bl,si,di,ds,es,cs,ss,ip,flags,zf,if},
-  emphstyle=\color{blue},
-  numbers=none,
+  stringstyle =\color{purple},
+  numbers     =none,
   showstringspaces=false
 }
 
+% Estilo por defecto si olvidas 'style='
+\lstset{
+  basicstyle=\ttfamily\small,
+  frame=single,
+  captionpos=b
+}
+
 % ----------------------- Metadatos del documento ---------------------------
-\title{\textbf{TP Sistemas de Computación}\\\large Práctico: UEFI}
+\title{\textbf{TP Sistemas de Computación}\\\large Práctico: UEFI / Bootloader en NASM}
 \author{Alumno: Nombre Apellido \\ Materia: Sistemas de Computación \\ Comisión: XX}
 \date{\today}
 
@@ -114,6 +120,7 @@
 \begin{document}
 
 \input{caratula}
+
 \tableofcontents
 \clearpage
 
@@ -121,7 +128,6 @@
 \input{uefi}
 \input{coreboot}
 \input{linker}
-\input{direccion_7c00}
-\input{demostracion_practica} % ajusta/elimina si no lo usas
+\input{desafiofinal}
 
 \end{document}

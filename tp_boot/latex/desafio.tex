@@ -1,0 +1,143 @@
+% desafiofinal.tex
+\section{Desafío Final: Implementación y Explicación}
+
+\subsection{Crear Código Assembler para Pasar a Modo Protegido (sin macros)}
+
+El objetivo era crear un sector de arranque (MBR) que, iniciando en Modo Real de 16 bits, realizara los pasos necesarios para entrar en Modo Protegido de 32 bits utilizando las instrucciones máquina explícitas, sin depender de macros que pudieran ocultar el proceso.
+
+\subsubsection{Estructura del Código y Archivos}
+
+Para una mejor organización y reutilización, el código se dividió en varios archivos fuente ensamblador (usando sintaxis NASM):
+\begin{itemize}
+    \item \texttt{pm.asm}: Archivo principal que contiene el punto de entrada (\texttt{\_start}), la inicialización básica, las llamadas a las funciones de impresión y transición, y las definiciones de mensajes.
+    \item \texttt{print\_string.asm}: Contiene la función \texttt{print\_string} para imprimir cadenas en Modo Real usando la interrupción 0x10 del BIOS.
+    \item \texttt{gdt.asm}: Define la Tabla de Descriptores Globales (GDT) necesaria para el Modo Protegido, incluyendo el descriptor nulo obligatorio, un descriptor para el segmento de código y un descriptor para el segmento de datos. También define el descriptor especial que apunta a la propia GDT (requerido por la instrucción \texttt{lgdt}).
+    \item \texttt{switch\_to\_pm.asm}: Contiene la función \texttt{switch\_to\_pm} que ejecuta la secuencia de transición (deshabilitar interrupciones, cargar GDT, activar bit PE en CR0, salto largo) y la etiqueta \texttt{init\_pm} donde aterriza el código de 32 bits para configurar los segmentos y la pila en Modo Protegido.
+    \item \texttt{print\_string\_pm.asm}: Contiene la función \texttt{print\_string\_pm} para imprimir cadenas directamente en la memoria de video (\texttt{0xB8000}), necesaria ya que el BIOS no está disponible en Modo Protegido.
+\end{itemize}
+El archivo principal \texttt{pm.asm} utiliza la directiva \texttt{\%include} de NASM para incorporar el contenido de los otros archivos durante el ensamblaje.
+
+\subsubsection{El Problema del Formato Binario Directo (\texttt{-f bin})}
+
+Inicialmente, se intentó ensamblar directamente a un formato binario crudo usando \texttt{nasm pm.asm -f bin -o pm.img}. Sin embargo, este enfoque presentó serios problemas al depurar con GDB:
+\begin{itemize}
+    \item \textbf{Desensamblado Incorrecto:} GDB mostraba secuencias de instrucciones inválidas (\texttt{(bad)}) o incorrectas en direcciones donde se esperaba código válido (especialmente después de los \texttt{call} o cerca de los límites de los archivos incluidos).
+    \item \textbf{Fallo Prematuro (Triple Fallo):} La ejecución en QEMU fallaba catastróficamente (probablemente por un Triple Fallo) justo al intentar realizar el salto largo (\texttt{ljmp}) a Modo Protegido, indicando que la CPU no podía encontrar o validar el descriptor de código especificado o la dirección de destino.
+\end{itemize}
+La causa raíz es que NASM, al generar un binario crudo (\texttt{-f bin}) a partir de múltiples archivos incluidos y con cambios de modo (\texttt{[bits 16]}, \texttt{[bits 32]}), no tiene suficiente información contextual para calcular y colocar correctamente todos los offsets, direcciones y bloques de código/datos relativos a la dirección de carga final (\texttt{0x7C00}) y resolver referencias entre los diferentes «módulos» incluidos. El resultado era un archivo \texttt{pm.img} corrupto o mal estructurado.
+
+\subsubsection{Solución: Flujo de Trabajo ELF}
+
+Para solucionar estos problemas, se adoptó un flujo de trabajo más robusto y estándar utilizando un formato intermedio:
+\begin{enumerate}
+    \item \textbf{Ensamblar a ELF:} Se ensambló el archivo principal \texttt{pm.asm} (que incluye a los demás) a un formato de objeto ELF de 32 bits usando \texttt{nasm -f elf pm.asm -o pm.o}. ELF (Executable and Linkable Format) es un formato que preserva la información sobre secciones (\texttt{.text}, \texttt{.data}), símbolos (etiquetas como \texttt{\_start}, \texttt{print\_string}, \texttt{gdt\_start}), y datos de relocalización necesarios para el linker.
+    \item \textbf{Enlazar con LD y Script:} Se utilizó el linker GNU \texttt{ld} con la opción \texttt{-m elf\_i386} (para asegurar compatibilidad con el objetivo i386) y un script de linker (\texttt{link.ld}). Este script instruye a \texttt{ld} para:
+        \begin{itemize}
+            \item Establecer la dirección de carga base en \texttt{0x7C00}.
+            \item Combinar las secciones \texttt{.text}, \texttt{.data}, etc., del archivo \texttt{pm.o} en una única sección de salida posicionada en \texttt{0x7C00}.
+            \item Resolver todas las direcciones (como la dirección de \texttt{gdt\_start} usada por \texttt{lgdt}, la dirección de \texttt{MSG\_REAL\_MODE} usada por \texttt{mov si}, y las direcciones de las funciones \texttt{print\_string} y \texttt{switch\_to\_pm} usadas por \texttt{call}) relativas a la base \texttt{0x7C00}.
+            \item Asegurar que el archivo de salida tenga exactamente 512 bytes, añadiendo relleno si es necesario y la firma MBR \texttt{0xAA55} al final (usando \texttt{. = 0x7C00 + 510; BYTE(0x55) BYTE(0xAA);}).
+        \end{itemize}
+        Comando: \texttt{ld -m elf\_i386 -T link.ld -o pm.elf pm.o}
+    \item \textbf{Extraer Binario Crudo:} Finalmente, se usó \texttt{objcopy} para extraer únicamente los bytes del código y datos enlazados del archivo \texttt{pm.elf} y volcarlos a la imagen binaria cruda final: \texttt{objcopy -O binary pm.elf pm.img}.
+\end{enumerate}
+Este enfoque delega la compleja tarea de posicionamiento y resolución de direcciones al linker (\texttt{ld}), que está diseñado específicamente para ello, resultando en un archivo \texttt{pm.img} correctamente estructurado y funcional.
+
+\subsubsection{Código de Transición Detallado (en \texttt{switch\_to\_pm.asm})}
+
+El núcleo de la transición reside en la función \texttt{switch\_to\_pm}, que realiza los siguientes pasos indispensables (sin macros):
+
+\begin{lstlisting}[style=NasmStyle,
+    caption={\texttt{switch\_to\_pm.asm} (Núcleo de la transición)}]
+[bits 16]
+switch_to_pm:
+cli                         ; 1. Deshabilitar interrupciones enmascarables. CRUCIAL
+                 ;    para evitar que una IT ocurra durante la transición
+                 ;    cuando el estado de la CPU es inconsistente.
+
+lgdt [gdt_descriptor]       ; 2. Cargar el Registro Descriptor de la GDT (GDTR).
+                 ;    Lee 6 bytes desde la dirección de la etiqueta 'gdt_descriptor'.
+                 ;    Esos 6 bytes contienen el límite (tamaño-1) de la GDT
+                 ;    y la dirección base lineal donde reside la GDT en memoria.
+                 ;    Esto le informa a la CPU dónde encontrar la tabla GDT.
+
+; 3. Activar Modo Protegido (Bit PE en CR0)
+mov eax, cr0                ; 3a. Leer el registro de control CR0 en EAX (32 bits).
+or eax, 0x01                ; 3b. Poner el bit 0 (PE - Protection Enable) a 1 usando OR.
+                 ;     Los otros bits de CR0 se mantienen.
+mov cr0, eax                ; 3c. Escribir el valor modificado de vuelta a CR0.
+                 ;     ¡A partir de este instante, la CPU opera en Modo Protegido!
+
+; 4. Salto Largo (Far Jump)
+;    Es OBLIGATORIO inmediatamente después de activar PE. Sirve para:
+;    a) Limpiar la cola de prefetch de instrucciones de la CPU, que podría
+;       contener instrucciones decodificadas como si fueran de Modo Real.
+;    b) Cargar el registro de segmento de Código (CS) con un SELECTOR válido
+;       de nuestra nueva GDT.
+;    c) Transferir la ejecución al código diseñado para 32 bits.
+jmp 0x08 : init_pm          ; Salto a: Selector de Código (0x08, segundo descriptor)
+                 ;          Offset (dirección de la etiqueta 'init_pm')
+
+[bits 32]                       ; A partir de aquí, el ensamblador genera código de 32 bits
+init_pm:                        ; Punto de aterrizaje en Modo Protegido
+; 5. Configurar Segmentos de Datos y Pila (32 bits)
+mov ax, 0x10                ; Cargar SELECTOR del segmento de Datos (0x10) en AX.
+                 ; Se usa AX (16 bits) porque los selectores son de 16 bits.
+mov ds, ax                  ; Cargar DS con el selector de datos.
+mov ss, ax                  ; Cargar SS (segmento de pila) con el mismo selector.
+mov es, ax                  ; Cargar ES.
+mov fs, ax                  ; Cargar FS (opcional).
+mov gs, ax                  ; Cargar GS (opcional).
+; Ahora todos los accesos a datos o pila usarán el descriptor GDT en el índice 2.
+
+; 6. Configurar el Puntero de Pila (ESP)
+mov esp, 0x90000            ; Establecer ESP (32 bits) a una dirección segura y válida
+                 ; (ej. 0x90000), ubicada dentro de los límites del
+                 ; segmento de datos/pila cargado en SS.
+
+; 7. Continuar con la ejecución en Modo Protegido
+call BEGIN_PM               ; Llamar a la rutina principal de PM (en pm.asm)
+\end{lstlisting}
+
+\subsection{Programa con Descriptores de Código y Datos Diferenciados}
+
+El Modo Protegido requiere definir explícitamente los segmentos de memoria que el programa utilizará a través de la GDT. Nuestro programa utiliza los descriptores mínimos necesarios para un funcionamiento básico:
+
+\begin{itemize}
+    \item \textbf{Descriptor Nulo (Índice 0):} Es obligatorio por la especificación Intel. Todos sus campos deben ser cero. Intentar cargar un selector que apunte a este descriptor causa una excepción.
+    \item \textbf{Descriptor de Código (Índice 1, Selector 0x08):} Define las propiedades del segmento donde reside nuestro código ejecutable.
+        \begin{itemize}
+            \item \texttt{Base = 0x00000000}: El segmento empieza al inicio de la memoria física.
+            \item \texttt{Límite = 0xFFFFF (con Granularidad=1)}: El segmento se extiende por 4 GiB (\( (0xFFFFF + 1) \times 4096 \)). Cubre todo el espacio de direcciones direccionable en 32 bits. Esto se conoce como modelo «plano» (flat model).
+            \item \texttt{Acceso = 0x9A}: Indica que es un segmento Presente (P=1), de nivel de privilegio 0 (DPL=00, el más alto, Ring 0), de tipo Código (S=1, Type=1010), que es Ejecutable y Leíble (R=1).
+            \item \texttt{Flags = 0xCF}: Indica Granularidad de 4KiB (G=1), tamaño de operando/dirección de 32 bits (D=1), y los bits altos del límite.
+        \end{itemize}
+        El registro \texttt{CS} se carga con el selector \texttt{0x08} mediante el \texttt{ljmp}.
+    \item \textbf{Descriptor de Datos (Índice 2, Selector 0x10):} Define las propiedades del segmento para datos y la pila.
+        \begin{itemize}
+            \item \texttt{Base = 0x00000000}: Igual que el código, empieza al inicio de la memoria.
+            \item \texttt{Límite = 0xFFFFF (con Granularidad=1)}: Igual, 4 GiB. Modelo plano.
+            \item \texttt{Acceso = 0x92}: Indica Presente (P=1), DPL=00, de tipo Datos (S=1, Type=0010), que es Leíble y Escribible (W=1).
+            \item \texttt{Flags = 0xCF}: Idéntico al segmento de código (32 bits, granularidad 4K).
+        \end{itemize}
+        Los registros \texttt{DS}, \texttt{ES}, \texttt{FS}, \texttt{GS}, \texttt{SS} se cargan con el selector \texttt{0x10} después de entrar en modo protegido.
+\end{itemize}
+
+\subsubsection{Espacios de Memoria Diferenciados (Concepto vs. Implementación Plana)}
+
+La pregunta pide específicamente segmentos en «espacios de memoria diferenciados». Con los descriptores definidos arriba (modelo plano), tanto el código como los datos \textit{pueden} acceder teóricamente al mismo espacio lineal completo de 4 GiB porque ambos tienen Base=0 y Límite=4 GiB.
+
+Para tener espacios verdaderamente \textit{diferenciados} y separados por hardware (más allá de solo los permisos R/W/X), necesitaríamos definir descriptores con \textbf{bases y/o límites diferentes}. Por ejemplo:
+
+\begin{itemize}
+    \item \textbf{Código Separado:} Se podría definir el descriptor de código con Base=0x100000 y Límite=0xFFFFF (cubriendo desde 1 MiB hasta 4 GiB+1 MiB con granularidad), mientras que el de datos tiene Base=0 y Límite=0x1FFFF (cubriendo los primeros 128 KiB con granularidad de byte para la pila y datos iniciales).
+    \item \textbf{Datos Separados:} Podríamos tener Código Base=0, Límite=Y, y Datos Base=Y+1, Límite=Z.
+\end{itemize}
+
+Esto requeriría:
+\begin{enumerate}
+    \item Modificar las definiciones \texttt{dw base\_low, db base\_mid, db base\_high} y \texttt{dw limit\_low, db flags\_limit\_high} en \texttt{gdt.asm} para cada descriptor.
+    \item Asegurarse de que el linker coloque el código y los datos en las regiones de memoria física correspondientes a esas bases definidas en los descriptores. Esto requeriría un script \texttt{link.ld} más complejo, definiendo secciones \texttt{.text} y \texttt{.data} con direcciones de carga (\texttt{AT}) diferentes y especificando sus direcciones virtuales (\texttt{. = direccion\_virtual}) correspondientes a las bases de los descriptores.
+\end{enumerate}
+
+Sin embargo, para la funcionalidad básica de este TP, el \textbf{modelo plano (Base=0, Límite=4 GB para ambos)} es mucho más simple de implementar y es el modelo predominante usado por los sistemas operativos modernos (que luego utilizan paginación para la separación y protección fina). Nuestro código actual, aunque no usa bases/límites diferentes, sí tiene descriptores funcionalmente distintos para código (Ejecutable/Leíble) y datos (Leíble/Escribible).
