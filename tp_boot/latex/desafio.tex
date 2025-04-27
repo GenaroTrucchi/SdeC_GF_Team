@@ -140,7 +140,7 @@ Para tener espacios verdaderamente \textit{diferenciados} y separados por hardwa
     \item \textbf{Código Separado:} Se podría definir el descriptor de código con Base=0x100000 y Límite=0xFFFFF (cubriendo desde 1 MiB hasta 4 GiB+1 MiB con granularidad), mientras que el de datos tiene Base=0 y Límite=0x1FFFF (cubriendo los primeros 128 KiB con granularidad de byte para la pila y datos iniciales).
     \item \textbf{Datos Separados:} Podríamos tener Código Base=0, Límite=Y, y Datos Base=Y+1, Límite=Z.
 \end{itemize}
-
+\newpage
 Esto requeriría:
 \begin{enumerate}
     \item Modificar las definiciones \texttt{dw base\_low, db base\_mid, db base\_high} y \texttt{dw limit\_low, db flags\_limit\_high} en \texttt{gdt.asm} para cada descriptor.
@@ -151,13 +151,11 @@ Sin embargo, para la funcionalidad básica de este TP, el \textbf{modelo plano (
 
 % --- INICIO DEL CONTENIDO A INCLUIR ---
 
-\section{Prueba de Protección de Memoria (Segmento Read-Only)}
+\section{Prueba de Protección de Memoria (Read-Only)}
 
 Una de las características fundamentales introducidas por el Modo Protegido es la capacidad del hardware para hacer cumplir permisos de acceso a los segmentos de memoria definidos en la GDT. Para verificar esto experimentalmente, modificamos nuestro bootloader para intentar escribir en un segmento de datos configurado como "solo lectura".
 
 \subsection{Modificaciones al Código}
-
-Se realizaron dos cambios principales:
 
 \begin{enumerate}
     \item \textbf{Definición de Descriptor Read-Only en \texttt{gdt.asm}:}
@@ -166,18 +164,21 @@ Se realizaron dos cambios principales:
           y Límite (4 GiB) que los demás, pero con un \textbf{Byte de Acceso} específico: \texttt{0x90}.
   
           \begin{lstlisting}[style=NasmStyle,
-            caption={Descriptor Read-Only en \texttt{gdt.asm}}, numbers=none]
-  ; Descriptor 3: Datos Read-Only (Selector 0x18)
-  gdt_data_ro:
-      dw 0xFFFF                   ; Limite (0-15)
-      dw 0x0000                   ; Base (0-15)
-      db 0x00                     ; Base (16-23)
-      db 0x90                     ; <<< Byte de Acceso (10010000b) >>>
-                                  ; P=1, DPL=0, S=1(Datos), Type=0000 -> Writable=0
-      db 0xCF                     ; Flags(G=1, D=1 -> 32 bit) + Limit(16-19)
-      db 0x00                     ; Base (24-31)
-  
-  gdt_end:                        ; Etiqueta movida al final
+            caption={Descriptor Read-Only en \texttt{gdt.asm}},
+            numbers=none,
+            breaklines=true
+          ]
+          ; Descriptor 3: Datos Read-Only (Selector 0x18)
+          gdt_data_ro:
+              dw 0xFFFF                   ; Limite (0-15)
+              dw 0x0000                   ; Base (0-15)
+              db 0x00                     ; Base (16-23)
+              db 0x90                     ; <<< Byte de Acceso (10010000b) >>>
+                                          ; P=1, DPL=0, S=1(Datos), Type=0000 -> Writable=0
+              db 0xCF                     ; Flags(G=1, D=1 -> 32 bit) + Limit(16-19)
+              db 0x00                     ; Base (24-31)
+          
+          gdt_end:                        ; Etiqueta movida al final
           \end{lstlisting}
   
           El byte de acceso \texttt{0x90} (\texttt{10010000b}) indica explícitamente que el segmento
@@ -194,26 +195,29 @@ Se realizaron dos cambios principales:
           se añadió el siguiente bloque para probar la protección:
   
           \begin{lstlisting}[style=NasmStyle,
-            caption={Intento de escritura R/O en \texttt{switch\_to\_pm.asm}}, % <-  \_
-            numbers=none]
+            caption={Intento de escritura R/O en \texttt{switch\_to\_pm.asm}},
+            numbers=none,
+            breaklines=true,
+            postbreak=\mbox{\textcolor{red}{$\hookrightarrow$}\space}
+          ]
           ; Prueba con segmento R/O (Selector 0x18)
           mov ax, 0x18                ; Cargar Selector Datos Read-Only
           mov ds, ax                  ; Actualizar DS para usar el segmento R/O
           
-          mov dword [0x3000], 0xDEADBEEF ;  usando el segmento definido por DS (ahora R/O)
-                                          ;  ESTO DEBE FALLAR.
+          mov dword [0x3000], 0xDEADBEEF ; usando el segmento definido por DS (ahora R/O)
+                                         ; ESTO DEBE FALLAR.
           
           ;
-  .write_protection_failed:            ; <- un solo \texttt{} era suficiente
-          ; 
-          mov edi, 0xb8000 + 320       ; 
+          .write_protection_failed:
+          ;
+          mov edi, 0xb8000 + 320       ;
           mov ax, 0x4f45               ; 'E' roja
           mov [edi], ax
           mov ax, 0x4f52               ; 'R' roja
           mov [edi+2], ax
           mov ax, 0x4f52               ; 'R' roja
           mov [edi+4], ax
-  .hang_error:
+          .hang_error:
           cli
           hlt
           jmp .hang_error
@@ -226,55 +230,60 @@ Se realizaron dos cambios principales:
           por error, la protección no se activara.
   \end{enumerate}
   
-
-
+\newpage
 
 \subsection{Ejecución y Resultados: ¿Qué Sucede?}
 
 Tras recompilar y enlazar el código con las modificaciones, se ejecutó la imagen \texttt{pm\_final.img} resultante. El comportamiento observado dependió del entorno de ejecución:
 
 \begin{itemize}
-    \item \textbf{En QEMU (modo TCG por defecto):}
-          Al ejecutar \verb|qemu-system-i386 -fda pm_final.img -boot a| se observó lo siguiente:
-  \begin{verbatim}
-  Booting from Floppy...
-  Comienza en 16-bit Modo Real
-  Paso exitosamente a 32-bit Modo protegido
-  ERR
-  \end{verbatim}
-  
-          La aparición del mensaje \texttt{ERR} indica que la instrucción
-          \verb|mov dword [0x3000], 0xDEADBEEF|
-          \emph{no generó la excepción esperada}; la ejecución alcanzó el
-          manejador de error \texttt{.write\_protection\_failed}.
-          Esto se debe a una limitación de QEMU en modo TCG, que no realiza todas
-          las comprobaciones de permisos R/W de los descriptores de segmento.
-  
-    \item \textbf{En Bochs (emulador preciso):}
-          Al lanzar la misma imagen con \verb|bochs -q| (usando un \texttt{.bochsrc}
-          adecuado) el comportamiento cambió:
-          \begin{enumerate}[label=(\alph*)]
-            \item Se mostraron los mensajes iniciales 
-            \item La emulación se detuvo de inmediato.
-            \item El log \texttt{bochsout.txt} registró:
-  \begin{verbatim}
-  ... (estado de registros justo antes del fallo) ...
-  00XXX[CPU0 ] exception(): 3rd (13) exception with no resolution,
-                shutdown status is 00h, resetting
-  ... (mensajes de reinicio) ...
-  \end{verbatim}
-                  Bochs reportó la \textbf{excepción 13} (GP – General Protection Fault);
-                  al no haber IDT pasó a triple falta y reinició la VM.
-          \end{enumerate}
-  
-    \item \textbf{En QEMU con KVM:}
-          Ejecutando \verb|qemu-system-i386 -enable-kvm -fda pm_final.img -boot a|
-          se ven los dos mensajes iniciales y QEMU se cierra abruptamente: de nuevo
-          se trata de la triple falta, que KVM/QEMU resuelve terminando la emulación.
-  \end{itemize}
+    \item \textbf{En QEMU (modo TCG por defecto):} \\
+    Al ejecutar \verb|qemu-system-i386 -fda pm_final.img -boot a| se observó lo siguiente:
+    
+    \begin{quote}
+        \ttfamily
+        Booting from Floppy... \\
+        Comienza en 16-bit Modo Real \\
+        Paso exitosamente a 32-bit Modo protegido \\
+        ERR
+        \end{quote}
+    
+        La aparición del mensaje \texttt{ERR} indica que la instrucción
+        \texttt{mov dword [0x3000], 0xDEADBEEF}
+        \emph{no generó la excepción esperada}; la ejecución alcanzó el
+        manejador de error \texttt{.write\_protection\_failed}.
+        Esto se debe a una limitación de QEMU en modo TCG, que no realiza todas
+        las comprobaciones de permisos R/W de los descriptores de segmento.
+        
+    \item \textbf{En Bochs (emulador preciso):} \\
+    Al lanzar la misma imagen con \verb|bochs -q| (usando un \texttt{.bochsrc}
+    adecuado) el comportamiento cambió:
+
+    \begin{enumerate}[label=(\alph*)]
+        \item Se mostraron los mensajes iniciales.
+        \item La emulación se detuvo de inmediato.
+        \item El log \texttt{bochsout.txt} registró:
+        
+        \begin{verbatim}
+... (estado de registros justo antes del fallo) ...
+00XXX[CPU0 ] exception(): 3rd (13) exception with no resolution,
+              shutdown status is 00h, resetting
+... (mensajes de reinicio) ...
+        \end{verbatim}
+        
+        Bochs reportó la \textbf{excepción 13} (GP – General Protection Fault);
+        al no haber IDT pasó a triple falta y reinició la VM.
+    \end{enumerate}
+
+    \item \textbf{En QEMU con KVM:} \\
+    Ejecutando \verb|qemu-system-i386 -enable-kvm -fda pm_final.img -boot a|
+    se ven los dos mensajes iniciales y QEMU se cierra abruptamente: de nuevo
+    se trata de la triple falta, que KVM/QEMU resuelve terminando la emulación.
+\end{itemize}
+
   
 
-**Conclusión del Experimento:** La ejecución en Bochs y QEMU con KVM **verifica exitosamente** que la CPU (real o emulada con precisión) detecta el intento de escritura en un segmento marcado como Read-Only (W=0 en el descriptor) y genera la excepción de Falla de Protección General (GP) como se espera según la arquitectura x86.
+\textbf{Conclusión del Experimento:} La ejecución en Bochs y QEMU con KVM \textbf{verifica exitosamente} que la CPU (real o emulada con precisión) detecta el intento de escritura en un segmento marcado como Read-Only (W=0 en el descriptor) y genera la excepción de Falla de Protección General (GP) como se espera según la arquitectura x86.
 
 \subsection{¿Qué Debería Suceder a Continuación (Teoría del Fallo)?}
 
@@ -282,16 +291,16 @@ Cuando la CPU ejecuta una instrucción que viola las reglas de protección defin
 \begin{enumerate}
     \item \textbf{Generación de Excepción GP (Vector 13):} La CPU detiene la ejecución de la instrucción infractora y genera una Falla de Protección General. Busca en la Tabla de Descriptores de Interrupción (IDT) la entrada correspondiente al vector 13.
     \item \textbf{Intento de Invocar al Manejador GP:} La CPU intenta transferir el control al manejador de excepciones definido en la entrada 13 de la IDT.
-    \item \textbf{Fallo por Falta de IDT/Manejador (Doble Falta):} En nuestro bootloader, no hemos configurado ni cargado una IDT para el Modo Protegido usando la instrucción \texttt{lidt}. La CPU no encuentra un descriptor válido para el vector 13. Este fallo al manejar una excepción genera una nueva excepción: la **Doble Falta (Excepción DF - Vector 8)**.
+    \item \textbf{Fallo por Falta de IDT/Manejador (Doble Falta):} En nuestro bootloader, no hemos configurado ni cargado una IDT para el Modo Protegido usando la instrucción \texttt{lidt}. La CPU no encuentra un descriptor válido para el vector 13. Este fallo al manejar una excepción genera una nueva excepción: la \textbf{Doble Falta (Excepción DF - Vector 8)}.
     \item \textbf{Intento de Invocar al Manejador DF:} La CPU intenta transferir el control al manejador de Doble Falta definido en la entrada 8 de la IDT.
-    \item \textbf{Fallo por Falta de Manejador DF (Triple Falta):} Como sigue sin haber una IDT válida, la CPU falla de nuevo al intentar manejar la Doble Falta. Una excepción ocurrida mientras se intenta invocar al manejador de Doble Falta resulta en una condición irrecuperable conocida como **Triple Falta**.
+    \item \textbf{Fallo por Falta de Manejador DF (Triple Falta):} Como sigue sin haber una IDT válida, la CPU falla de nuevo al intentar manejar la Doble Falta. Una excepción ocurrida mientras se intenta invocar al manejador de Doble Falta resulta en una condición irrecuperable conocida como \textbf{Triple Falta}.
     \item \textbf{Shutdown (Apagado/Reinicio):} Ante una Triple Falta, la CPU entra en un estado de "shutdown". En hardware real, esto generalmente provoca un reinicio inmediato de la placa base. Los emuladores como Bochs y QEMU+KVM simulan este comportamiento deteniendo la emulación o reportando el fallo fatal.
 \end{enumerate}
 Por lo tanto, el resultado esperado al intentar escribir en el segmento R/O en nuestro contexto (sin IDT) es, efectivamente, un Triple Fallo que detiene o reinicia el sistema.
 
 \subsection{Verificación con GDB}
 
-Aunque QEMU en modo TCG no genera el GP, GDB sigue siendo útil para verificar que los prerrequisitos para el fallo *estaban* presentes:
+Aunque QEMU en modo TCG no genera el GP, GDB sigue siendo útil para verificar que los prerrequisitos para el fallo estaban presentes:
 \begin{enumerate}
     \item Se conectó GDB a QEMU (`target remote`).
     \item Se cargó el archivo ELF (`file pm.elf`) para obtener símbolos (aunque GDB mostró advertencias, pudo usarlos parcialmente).
@@ -308,8 +317,7 @@ Esta depuración confirma que el código cargó el selector correcto para el seg
 
 \textbf{Pregunta:} En modo protegido, ¿Con qué valor se cargan los registros de segmento? ¿Porque?
 
-\textbf{Respuesta:}
-En Modo Protegido, los registros de segmento (CS, DS, ES, SS, FS, GS) **NO** se cargan con direcciones base como en Modo Real. En su lugar, se cargan con valores de 16 bits llamados **Selectores**. En nuestro ejemplo, DS, ES, SS, etc., se cargaron con el selector \texttt{0x10} para el segmento de datos R/W, y luego DS se cambió al selector \texttt{0x18} para el segmento R/O.
+En Modo Protegido, los registros de segmento (CS, DS, ES, SS, FS, GS) \textbf{NO} se cargan con direcciones base como en Modo Real. En su lugar, se cargan con valores de 16 bits llamados \textbf{Selectores}. En nuestro ejemplo, DS, ES, SS, etc., se cargaron con el selector \texttt{0x10} para el segmento de datos R/W, y luego DS se cambió al selector \texttt{0x18} para el segmento R/O.
 
 La estructura de un selector es:
 \begin{itemize}[noitemsep]
@@ -319,7 +327,7 @@ La estructura de un selector es:
 \end{itemize}
 Por ejemplo, el selector \texttt{0x18} (binario \texttt{0000000000011000}) tiene: Índice = 3, TI = 0 (GDT), RPL = 0.
 
-**¿Por qué se usan Selectores en lugar de direcciones base?**
+\textbf{¿Por qué se usan Selectores en lugar de direcciones base?}
 
 Este mecanismo de indirección es fundamental para las características clave del Modo Protegido:
 \begin{enumerate}
