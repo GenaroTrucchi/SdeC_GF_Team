@@ -1,1 +1,11 @@
 \babel@toc {spanish}{}\relax 
+\contentsline {section}{\numberline {1}¿Qué es un módulo del kernel y para qué se usa?}{2}{section.1}%
+\contentsline {section}{\numberline {2}Estructura de un módulo de kernel (\texttt {module\_init}, \texttt {module\_exit}, Makefile)}{2}{section.2}%
+\contentsline {section}{\numberline {3}Compilación e instalación de módulos (\texttt {make}, \texttt {insmod}, \texttt {rmmod}, \texttt {lsmod}, \texttt {modinfo})}{4}{section.3}%
+\contentsline {section}{\numberline {4}Seguridad: firma de modulos para Secure Boot (por que es importante y como se realiza?)}{6}{section.4}%
+\contentsline {section}{\numberline {5}Diferencia entre espacio de usuario y espacio de kernel (seguridad e implicancias de errores como segmentation fault)}{7}{section.5}%
+\contentsline {section}{\numberline {6}Llamadas al sistema con \texttt {strace} y diferencia con las funciones disponibles en el kernel}{8}{section.6}%
+\contentsline {section}{\numberline {7}Archivos y directorios relevantes: \texttt {/proc}, \texttt {/dev}, \texttt {/lib/modules/\$(uname -r)/kernel}}{9}{section.7}%
+\contentsline {section}{\numberline {8}Drivers y deteccion de hardware (\texttt {hwinfo}, \texttt {lspci}, \texttt {lsusb}, etc.)}{10}{section.8}%
+\contentsline {paragraph}{Deteccion de hardware y modulos cargados.}{11}{section*.21}%
+\contentsline {section}{\numberline {9}Caso de estudio: Secure Boot, GRUB y el parche de Microsoft (Analisis del articulo de Ars Technica)}{12}{section.9}%
