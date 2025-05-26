@@ -12,3 +12,9 @@
 \contentsline {section}{\numberline {10}Que es \texttt {checkinstall} y para que sirve?}{14}{section.10}%
 \contentsline {section}{\numberline {11}Empaquetar un ``Hello World'' con \texttt {checkinstall}}{15}{section.11}%
 \contentsline {section}{\numberline {12}Mejorar la seguridad del kernel: evitar modulos no firmados y mitigar rootkits}{17}{section.12}%
+\contentsline {section}{\numberline {13}Módulo anticheat.c: Monitoreo de acceso a archivos usando kprobe}{18}{section.13}%
+\contentsline {subsection}{\numberline {13.1}Introducción y objetivo}{18}{subsection.13.1}%
+\contentsline {subsection}{\numberline {13.2}¿Qué es \texttt {kprobe}?}{18}{subsection.13.2}%
+\contentsline {subsection}{\numberline {13.3}Descripción del funcionamiento}{18}{subsection.13.3}%
+\contentsline {subsection}{\numberline {13.4}Código principal resumido}{19}{subsection.13.4}%
+\contentsline {subsection}{\numberline {13.5}Funcionamiento y pruebas}{20}{subsection.13.5}%

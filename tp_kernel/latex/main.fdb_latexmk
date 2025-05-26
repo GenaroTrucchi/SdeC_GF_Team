@@ -1,7 +1,7 @@
 # Fdb version 4
-["pdflatex"] 1748264544.03751 "/home/agustin/Documents/importante/facultad/sistemasDeComputacion/SdeC_GF_Team/tp_kernel/latex/main.tex" "main.pdf" "main" 1748264545.66551 0
+["pdflatex"] 1748269495.45356 "/home/agustin/Documents/importante/facultad/sistemasDeComputacion/SdeC_GF_Team/tp_kernel/latex/main.tex" "main.pdf" "main" 1748269497.34355 0
   "/etc/texmf/web2c/texmf.cnf" 1725376857.69937 475 c0e671620eb5563b2130f56340a5fde8 ""
-  "/home/agustin/Documents/importante/facultad/sistemasDeComputacion/SdeC_GF_Team/tp_kernel/latex/main.tex" 1748264542.04481 3400 953ba72cafa8b258de79566cd55667d2 ""
+  "/home/agustin/Documents/importante/facultad/sistemasDeComputacion/SdeC_GF_Team/tp_kernel/latex/main.tex" 1748269162.10719 3419 801c9bd1a0770f790f895e96ce8ed842 ""
   "/usr/share/texlive/texmf-dist/fonts/map/fontname/texfonts.map" 1577235249 3524 cb3e574dea2d1052e39280babc910dc8 ""
   "/usr/share/texlive/texmf-dist/fonts/tfm/jknappen/ec/ecbi1440.tfm" 1136768653 3072 4dda4299ed0d9dcf48c6a8bcfdc499fc ""
   "/usr/share/texlive/texmf-dist/fonts/tfm/jknappen/ec/ecbx1200.tfm" 1136768653 3584 402da0b29eafbad07963b1224b222f18 ""
@@ -142,15 +142,17 @@
   "/usr/share/texmf/web2c/texmf.cnf" 1707919699 40399 f2c302f7d2af602abb742093540a5834 ""
   "/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map" 1725376988.06087 5472669 54eaf61a88b6b7896ebd0dac973cb29c ""
   "/var/lib/texmf/web2c/pdftex/pdflatex.fmt" 1725377137 8215932 e9eb5faffbc8259faad4be928cf360cc ""
+  "anticheat.tex" 1748269478.11595 4673 6d212d2b7b987551c5ba0d0b030b3c87 ""
   "caratula.tex" 1748217822.75274 916 e7b5a67a03138c651060b91311bbd6d5 ""
   "desafio1.tex" 1748264107.73656 6057 a3d6b6578827c72a0ef6c16708837a3b ""
+  "images/dmesg.png" 1748269385.74065 18374 51d7e5a701eb6034472848c0046a1549 ""
   "images/kernellog.png" 1748221414.61352 27354 12267a5d1b820c8a2bf8b328cbe02014 ""
   "images/logo2.png" 1748217822.75474 367116 38be5dac9119e7b1641b1a984f09afd9 ""
   "images/paso1.png" 1748221414.61552 97956 6003a9585df7a6c0aa621326bd56902e ""
-  "main.aux" 1748264545.48281 3545 b7e4898a7bac4f6da23ffd3eec6b181a "pdflatex"
-  "main.out" 1748264545.48581 5366 b96d52cd7eb3c2eebd09db4e485c6222 "pdflatex"
-  "main.tex" 1748264542.04481 3400 953ba72cafa8b258de79566cd55667d2 ""
-  "main.toc" 1748264545.48681 1851 27220ed126fba3319be67ebcd78267a7 "pdflatex"
+  "main.aux" 1748269497.13801 4534 257db0ccf2e95b4f97efba6b7aab2de2 "pdflatex"
+  "main.out" 1748269497.14001 6688 c5d655ab7daa7f4f4a00b136c012688c "pdflatex"
+  "main.tex" 1748269162.10719 3419 801c9bd1a0770f790f895e96ce8ed842 ""
+  "main.toc" 1748269497.14101 2452 32c4b042e76ee1b2e8ccf43107f90a88 "pdflatex"
   "teorico.tex" 1748221414.62852 30949 1d208b09dd704befe76286c8514fc289 ""
   (generated)
   "main.aux"
