@@ -9,3 +9,6 @@
 \contentsline {section}{\numberline {8}Drivers y deteccion de hardware (\texttt {hwinfo}, \texttt {lspci}, \texttt {lsusb}, etc.)}{10}{section.8}%
 \contentsline {paragraph}{Deteccion de hardware y modulos cargados.}{11}{section*.21}%
 \contentsline {section}{\numberline {9}Caso de estudio: Secure Boot, GRUB y el parche de Microsoft (Analisis del articulo de Ars Technica)}{12}{section.9}%
+\contentsline {section}{\numberline {10}Que es \texttt {checkinstall} y para que sirve?}{14}{section.10}%
+\contentsline {section}{\numberline {11}Empaquetar un ``Hello World'' con \texttt {checkinstall}}{15}{section.11}%
+\contentsline {section}{\numberline {12}Mejorar la seguridad del kernel: evitar modulos no firmados y mitigar rootkits}{17}{section.12}%
