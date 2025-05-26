@@ -1,0 +1,1 @@
+cmd_/home/mateo/FacultadMate/computacion/SdeC_GF_Team/tp_kernel/src/hello.mod := printf '%s\n'   hello.o | awk '!x[$$0]++ { print("/home/mateo/FacultadMate/computacion/SdeC_GF_Team/tp_kernel/src/"$$0) }' > /home/mateo/FacultadMate/computacion/SdeC_GF_Team/tp_kernel/src/hello.mod

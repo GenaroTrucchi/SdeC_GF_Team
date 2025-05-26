@@ -1,0 +1,1 @@
+cmd_/home/mateo/FacultadMate/computacion/SdeC_GF_Team/tp_kernel/src/Module.symvers :=  sed 's/ko$$/o/'  /home/mateo/FacultadMate/computacion/SdeC_GF_Team/tp_kernel/src/modules.order | scripts/mod/modpost -m      -o /home/mateo/FacultadMate/computacion/SdeC_GF_Team/tp_kernel/src/Module.symvers -e -i Module.symvers -T - 
