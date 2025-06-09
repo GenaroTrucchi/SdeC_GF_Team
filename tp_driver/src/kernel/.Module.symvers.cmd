@@ -1,0 +1,1 @@
+savedcmd_/media/zen/discaso/FacultadMate/5toAnio/computacion/SdeC_GF_Team/tp_driver/src/kernel/Module.symvers :=  scripts/mod/modpost -M -m       -o /media/zen/discaso/FacultadMate/5toAnio/computacion/SdeC_GF_Team/tp_driver/src/kernel/Module.symvers -n -T /media/zen/discaso/FacultadMate/5toAnio/computacion/SdeC_GF_Team/tp_driver/src/kernel/modules.order -i Module.symvers -e 
